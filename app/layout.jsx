@@ -2,6 +2,7 @@ import '@/styles/shell.css';
 import '@/styles/pages.css';
 import Icons from '@/components/Icons';
 import SoundProvider from '@/components/SoundProvider';
+import ScrollFix from '@/components/ScrollFix';
 import { StoreProvider } from '@/context/StoreContext';
 
 export const metadata = {
@@ -56,6 +57,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <SoundProvider />
+        <ScrollFix />
         <a className="skip" href="#main">Skip to content</a>
         <Icons />
 
