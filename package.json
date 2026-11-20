@@ -1,0 +1,20 @@
+{
+  "name": "solum-storefront",
+  "version": "1.0.0",
+  "description": "Exact replica of SOLUM — Trail & Outdoor Running Apparel e-commerce storefront",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "solum",
+    "ecommerce",
+    "outdoor",
+    "trail-running",
+    "storefront"
+  ],
+  "author": "",
+  "license": "ISC"
+}
