@@ -11,7 +11,7 @@ function ProductInner() {
 
     const script = document.createElement('script');
     script.type = 'module';
-    script.src = '/assets/product-nfrmIRU5.js';
+    script.src = `/assets/product-nfrmIRU5.js?v=${Date.now()}`;
     document.body.appendChild(script);
 
     return () => {

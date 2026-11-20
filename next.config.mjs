@@ -6,7 +6,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
   outputFileTracingRoot: __dirname,
   images: {
     unoptimized: true
@@ -46,6 +45,14 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      {
+        source: '/shopproduct',
+        destination: '/product'
+      },
+      {
+        source: '/shop/product',
+        destination: '/product'
+      },
       {
         source: '/solum/:path*',
         destination: '/:path*'
