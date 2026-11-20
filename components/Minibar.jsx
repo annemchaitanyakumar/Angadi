@@ -17,8 +17,8 @@ export default function Minibar() {
     }
 
     const handleScroll = () => {
-      // On home page, show minibar after scrolling past hero (~600px)
-      if (window.scrollY > 400) {
+      // On home page, show minibar after scrolling past hero (~350px)
+      if (window.scrollY > 350) {
         setVisible(true);
       } else {
         setVisible(false);
@@ -30,10 +30,8 @@ export default function Minibar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
 
-  if (!visible) return null;
-
   return (
-    <div className="minibar" style={{ display: 'flex' }}>
+    <div className={`minibar ${visible ? 'is-on' : ''}`}>
       <button
         className="iconbtn minibar__menu"
         type="button"

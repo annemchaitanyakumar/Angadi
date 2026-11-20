@@ -1,99 +1,156 @@
-import Link from 'next/link';
-import Header from '@/components/Header';
-import { SIZE_CHART } from '@/lib/data';
+'use client';
 
-export const metadata = {
-  title: 'Help & Returns — ANGADI',
-  description: 'Shipping info, 60-day returns, sizing conversion table, and contact.'
-};
+import { useEffect, Suspense } from 'react';
 
-export default function HelpPage() {
+function HelpInner() {
+  useEffect(() => {
+    document.documentElement.classList.add('js');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('rm');
+    }
+
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = '/assets/help-B-KjyptW.js';
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  }, []);
+
   return (
-    <div className="page-wrap">
-      <header className="page-header" style={{ padding: '24px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-        <Header />
-      </header>
+    <div className="page page--help">
+      
+      {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
 
-      <main style={{ maxWidth: '900px', margin: '0 auto', padding: '60px 20px 100px' }}>
-        <h1 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 800, margin: '0 0 12px 0' }}>
-          Help &amp; Customer Care
-        </h1>
-        <p style={{ opacity: 0.7, fontSize: '16px', marginBottom: '48px' }}>
-          Find answers on shipping times, 60-day returns, warranty repairs, and sizing.
-        </p>
 
-        {/* Shipping */}
-        <section id="shipping" style={{ marginBottom: '48px', paddingBottom: '32px', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '16px' }}>Shipping Options &amp; Delivery</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-            <div style={{ background: '#f5f0e8', padding: '20px', borderRadius: '12px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 8px 0' }}>Standard Ground</h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.8 }}>3–5 business days. Free on all orders over USD 150 (otherwise $8.00).</p>
-            </div>
-            <div style={{ background: '#f5f0e8', padding: '20px', borderRadius: '12px' }}>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 8px 0' }}>Express Air</h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.8 }}>1–2 business days via FedEx priority ($18.00).</p>
-            </div>
-          </div>
-        </section>
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
 
-        {/* Returns */}
-        <section id="returns" style={{ marginBottom: '48px', paddingBottom: '32px', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '16px' }}>60-Day Free Returns</h2>
-          <p style={{ lineHeight: 1.6, opacity: 0.8, marginBottom: '16px' }}>
-            Try your gear on the trail. If the fit isn't right, return unworn or trail-tested items within 60 days of delivery for a full refund. Pre-paid shipping labels are included in every package.
-          </p>
-        </section>
+<header className="topbar" data-topbar>
+  <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
+  <a className="topbar__logo" href="/" aria-label="ANGADI home">ANGADI</a>
+  <nav className="topbar__links" aria-label="Main">
+    <a href="/shop/" data-nav="shop">Shop</a>
+    <a href="/shop/?gender=Women" data-nav="shop-women">Women</a>
+    <a href="/shop/?gender=Men" data-nav="shop-men">Men</a>
+    <a href="/#look">Lookbook</a>
+    <a href="/about/" data-nav="about">About</a>
+    <a href="/help/" data-nav="help">Help</a>
+  </nav>
+  <div className="topbar__actions">
+    <a className="iconbtn" href="/account/" data-nav="account" aria-label="Your account"><svg width="20" height="20"><use href="#i-user"/></svg></a>
+    <button className="iconbtn iconbtn--ink" type="button" data-open-bag aria-label="Open bag, 0 items">
+      <svg width="20" height="20"><use href="#i-bag"/></svg>
+      <span className="badge" data-bag-count hidden>0</span>
+    </button>
+  </div>
+</header>
 
-        {/* Sizing */}
-        <section id="sizes" style={{ marginBottom: '48px', paddingBottom: '32px', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '16px' }}>Size Conversion Guide (cm)</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid #161616' }}>
-                  <th style={{ padding: '12px 16px' }}>Size</th>
-                  <th style={{ padding: '12px 16px' }}>Chest (cm)</th>
-                  <th style={{ padding: '12px 16px' }}>Waist (cm)</th>
-                  <th style={{ padding: '12px 16px' }}>Hips (cm)</th>
-                </tr>
-              </thead>
+
+  <main id="main">
+    <header className="phead">
+      <h1 className="phead__title" data-scramble>Help &amp; FAQ</h1>
+      <p className="phead__lead" data-reveal>Shipping, returns, sizing, and a real person when you need one.</p>
+    </header>
+    <div className="help">
+      <nav className="hnav" aria-label="Help topics">
+        <a href="#shipping">Shipping</a><a href="#returns">Returns</a><a href="#sizes">Size guide</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+      </nav>
+      <div>
+        <section className="hsec" id="shipping" aria-labelledby="h-ship">
+          <h2 id="h-ship">Shipping</h2>
+          <p>Orders leave our studio within one business day. Shipping is free on orders over USD 150 after any promo code.</p>
+          <div className="table-wrap" data-reveal>
+            <table className="t">
+              <caption className="sr-only">Shipping methods</caption>
+              <thead><tr><th scope="col">Method</th><th scope="col">Delivery</th><th scope="col">Price</th></tr></thead>
               <tbody>
-                {Object.keys(SIZE_CHART).map((size) => (
-                  <tr key={size} style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-                    <td style={{ padding: '12px 16px', fontWeight: 700 }}>{size}</td>
-                    <td style={{ padding: '12px 16px' }}>{SIZE_CHART[size][0]}</td>
-                    <td style={{ padding: '12px 16px' }}>{SIZE_CHART[size][1]}</td>
-                    <td style={{ padding: '12px 16px' }}>{SIZE_CHART[size][2]}</td>
-                  </tr>
-                ))}
+                <tr><th scope="row">Standard</th><td>3–5 business days</td><td>USD 8.00, free over USD 150</td></tr>
+                <tr><th scope="row">Express</th><td>1–2 business days</td><td>USD 18.00</td></tr>
+                <tr><th scope="row">Canada</th><td>5–8 business days</td><td>USD 14.00</td></tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        {/* Contact */}
-        <section id="contact">
-          <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '16px' }}>Get in Touch</h2>
-          <p style={{ opacity: 0.8, marginBottom: '24px' }}>
-            Have a question about sizing, repair status, or an upcoming gear drop? Reach our Boulder team directly.
-          </p>
-          <div style={{ background: '#f5f0e8', padding: '24px', borderRadius: '12px', display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
-            <div>
-              <strong style={{ display: 'block', fontSize: '13px', opacity: 0.6 }}>Email</strong>
-              <span style={{ fontSize: '15px' }}>support@angadi-trail.com</span>
-            </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '13px', opacity: 0.6 }}>Hours</strong>
-              <span style={{ fontSize: '15px' }}>Mon–Fri, 8:00 AM – 5:00 PM MT</span>
-            </div>
-            <div>
-              <strong style={{ display: 'block', fontSize: '13px', opacity: 0.6 }}>Location</strong>
-              <span style={{ fontSize: '15px' }}>Boulder, Colorado</span>
-            </div>
-          </div>
+        <section className="hsec" id="returns" aria-labelledby="h-ret">
+          <h2 id="h-ret">Returns</h2>
+          <p>Changed your mind? Return anything unworn within 60 days for a full refund. Returns are free.</p>
+          <ol className="rsteps rsteps--light">
+            <li data-reveal><div><strong>Start a return</strong><span>Open the order from your account, or use the contact form below with your order number.</span></div></li>
+            <li data-reveal><div><strong>Drop it off</strong><span>We email a prepaid label. Any carrier drop-off point works.</span></div></li>
+            <li data-reveal><div><strong>Get refunded</strong><span>Refunds land on your original payment within 5 business days of arrival.</span></div></li>
+          </ol>
         </section>
-      </main>
+
+        <section className="hsec" id="sizes" aria-labelledby="h-size">
+          <h2 id="h-size">Size guide</h2>
+          <p>Body measurements. Between sizes? Size up for layering, down for a closer fit.</p>
+          <div className="units" role="group" aria-label="Units" data-reveal><button type="button" data-unit="cm" aria-pressed="true">cm</button><button type="button" data-unit="in" aria-pressed="false">in</button></div>
+          <div className="table-wrap" style={{"marginTop":"14px"}} data-size-table data-reveal></div>
+        </section>
+
+        <section className="hsec faq" id="faq" aria-labelledby="h-faq">
+          <h2 id="h-faq">FAQ</h2>
+          <div className="acc" data-faq></div>
+        </section>
+
+        <section className="hsec" id="contact" aria-labelledby="h-contact">
+          <h2 id="h-contact">Contact us</h2>
+          <p>We answer every message within one business day, Monday to Friday.</p>
+          <form className="form" noValidate data-contact>
+            <div className="row2 row2--stack">
+              <label className="field"><span>Name</span><input name="name" autoComplete="name" required aria-describedby="e-name" /><em className="field__err" id="e-name"></em></label>
+              <label className="field"><span>Email</span><input name="email" type="email" autoComplete="email" required aria-describedby="e-email" /><em className="field__err" id="e-email"></em></label>
+            </div>
+            <div className="row2 row2--stack">
+              <label className="field"><span>Topic</span><select name="topic"><option>An order</option><option>A return</option><option>A repair</option><option>Sizing</option><option>Something else</option></select></label>
+              <label className="field"><span>Order number <small className="field__hint">(optional)</small></span><input name="order" placeholder="SOL-10471" aria-describedby="e-order" /><em className="field__err" id="e-order"></em></label>
+            </div>
+            <label className="field"><span>Message</span><textarea name="message" required aria-describedby="e-msg"></textarea><em className="field__err" id="e-msg"></em></label>
+            <button className="pill pill--ink" type="submit">Send message</button>
+          </form>
+          <div className="sent" data-sent hidden tabIndex="-1"><strong>Message sent.</strong><span>Thanks — we’ll reply to your email within one business day.</span></div>
+        </section>
+      </div>
     </div>
+  </main>
+
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
+<footer className="footer" id="footer">
+  <p className="footer__big" data-scramble>See you<br />out there</p>
+  <div className="footer__cols">
+    <form className="join" noValidate>
+      <label className="join__label" htmlFor="join-email">First access to every drop</label>
+      <div className="join__row">
+        <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
+        <button className="pill pill--clay" type="submit">Join</button>
+      </div>
+      <p className="join__msg" role="status" aria-live="polite"></p>
+    </form>
+    <nav className="footer__links" aria-label="Footer">
+      <div><h3>Shop</h3><a href="/shop/">Shop all</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
+      <div><h3>Help</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
+      <div><h3>Company</h3><a href="/about/">Our story</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
+    </nav>
+  </div>
+  <div className="footer__base">
+    <span>© 2026 ANGADI Outdoor</span>
+    <span>Free returns within 60 days</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
+    </div>
+  );
+}
+
+export default function HelpPage() {
+  return (
+    <Suspense fallback={<div className="page page--help"></div>}>
+      <HelpInner />
+    </Suspense>
   );
 }

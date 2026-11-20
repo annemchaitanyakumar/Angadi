@@ -1,214 +1,111 @@
 'use client';
 
-import { useState, useMemo, Suspense } from 'react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import Header from '@/components/Header';
-import { useStore } from '@/context/StoreContext';
-import { PRODUCTS, formatPrice } from '@/lib/data';
+import { useEffect, Suspense } from 'react';
 
-function ShopContent() {
-  const searchParams = useSearchParams();
-  const initialGender = searchParams.get('gender') || 'All';
-  const initialCategory = searchParams.get('category') || 'All';
+function ShopInner() {
+  useEffect(() => {
+    document.documentElement.classList.add('js');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('rm');
+    }
 
-  const { addToBag, toggleSave, isSaved } = useStore();
-  const [gender, setGender] = useState(initialGender);
-  const [category, setCategory] = useState(initialCategory);
-  const [terrain, setTerrain] = useState('All');
-  const [sort, setSort] = useState('featured');
-  const [search, setSearch] = useState('');
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = '/assets/shop-CIODy1fQ.js';
+    document.body.appendChild(script);
 
-  const categories = ['All', 'Jackets', 'Fleece & Hoodies', 'Vests & Packs', 'Tops', 'Accessories'];
-  const terrains = ['All', 'Desert', 'Forest', 'Alpine', 'City'];
-  const genders = ['All', 'Women', 'Men'];
-
-  const filtered = useMemo(() => {
-    return PRODUCTS.filter((p) => {
-      if (gender !== 'All' && p.gender !== gender) return false;
-      if (category !== 'All' && p.category !== category) return false;
-      if (terrain !== 'All' && p.terrain !== terrain) return false;
-      if (search) {
-        const q = search.toLowerCase();
-        return (
-          p.name.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          p.terrain.toLowerCase().includes(q) ||
-          p.color.name.toLowerCase().includes(q)
-        );
-      }
-      return true;
-    }).sort((a, b) => {
-      if (sort === 'price-low') return a.price - b.price;
-      if (sort === 'price-high') return b.price - a.price;
-      if (sort === 'newest') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
-      return 0;
-    });
-  }, [gender, category, terrain, sort, search]);
+    return () => {
+      script.remove();
+    };
+  }, []);
 
   return (
-    <div className="page-wrap">
-      <header className="page-header" style={{ padding: '24px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-        <Header />
-      </header>
+    <div className="page page--shop">
+      <header className="topbar" data-topbar>
+  <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
+  <a className="topbar__logo" href="/" aria-label="ANGADI home">ANGADI</a>
+  <nav className="topbar__links" aria-label="Main">
+    <a href="/shop/" data-nav="shop">Shop</a>
+    <a href="/shop/?gender=Women" data-nav="shop-women">Women</a>
+    <a href="/shop/?gender=Men" data-nav="shop-men">Men</a>
+    <a href="/#look">Lookbook</a>
+    <a href="/about/" data-nav="about">About</a>
+    <a href="/help/" data-nav="help">Help</a>
+  </nav>
+  <div className="topbar__actions">
+    <a className="iconbtn" href="/account/" data-nav="account" aria-label="Your account"><svg width="20" height="20"><use href="#i-user"/></svg></a>
+    <button className="iconbtn iconbtn--ink" type="button" data-open-bag aria-label="Open bag, 0 items">
+      <svg width="20" height="20"><use href="#i-bag"/></svg>
+      <span className="badge" data-bag-count hidden>0</span>
+    </button>
+  </div>
+</header>
 
-      <main className="shop-main" style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 20px' }}>
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 800, margin: '0 0 12px 0', letterSpacing: '-0.03em' }}>
-            Shop All Layers
-          </h1>
-          <p style={{ fontSize: '16px', opacity: 0.7, margin: 0, maxWidth: '640px' }}>
-            Built for trail running, mountain ridgelines and alpine ascents. Filter by weather, terrain or fit.
-          </p>
+      <main id="main">
+        
+    <header className="phead">
+      <nav className="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page" data-crumb>Shop</li></ol></nav>
+      <h1 className="phead__title" data-title>Shop all</h1>
+      <p className="phead__lead" data-reveal>Shells, fleece and trail layers that move with you, from first light to the last climb.</p>
+    </header>
+
+    <div className="toolbar" role="region" aria-label="Filter and sort">
+      <div className="chips" role="group" aria-label="Category" data-chips></div>
+      <div className="toolbar__row">
+        <label className="search">
+          <svg width="20" height="20" aria-hidden="true"><use href="#i-search"/></svg>
+          <span className="sr-only">Search products</span>
+          <input type="search" name="q" placeholder="Search shells, fleece, vests…" autoComplete="off" data-q />
+        </label>
+        <div className="selects">
+          <label className="select"><span>Gender</span><select name="gender" data-gender><option value="">All</option><option>Women</option><option>Men</option></select></label>
+          <label className="select"><span>Terrain</span><select name="terrain" data-terrain><option value="">All</option><option>Desert</option><option>Forest</option><option>Alpine</option><option>City</option></select></label>
+          <label className="select"><span>Sort by</span><select name="sort" data-sort><option value="featured">Featured</option><option value="new">Newest</option><option value="price-asc">Price, low to high</option><option value="price-desc">Price, high to low</option><option value="rating">Top rated</option></select></label>
         </div>
+      </div>
+      <p className="toolbar__count" aria-live="polite" data-count></p>
+    </div>
 
-        {/* Filter controls */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '32px',
-          padding: '16px 20px',
-          background: 'rgba(0,0,0,0.03)',
-          borderRadius: '12px'
-        }}>
-          {/* Categories */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.6 }}>Category:</span>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                className="filter"
-                aria-pressed={category === cat}
-                onClick={() => setCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Gender */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.6 }}>Fit:</span>
-            {genders.map((g) => (
-              <button
-                key={g}
-                type="button"
-                className="filter"
-                aria-pressed={gender === g}
-                onClick={() => setGender(g)}
-              >
-                {g}
-              </button>
-            ))}
-          </div>
-
-          {/* Terrain & Sort */}
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <select
-              value={terrain}
-              onChange={(e) => setTerrain(e.target.value)}
-              style={{
-                padding: '8px 12px',
-                borderRadius: '999px',
-                border: '1px solid rgba(0,0,0,0.15)',
-                background: '#fff',
-                font: 'inherit',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}
-              aria-label="Filter by terrain"
-            >
-              <option value="All">All Terrains</option>
-              {terrains.filter(t => t !== 'All').map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              style={{
-                padding: '8px 12px',
-                borderRadius: '999px',
-                border: '1px solid rgba(0,0,0,0.15)',
-                background: '#fff',
-                font: 'inherit',
-                fontSize: '13px',
-                cursor: 'pointer'
-              }}
-              aria-label="Sort products"
-            >
-              <option value="featured">Featured</option>
-              <option value="newest">Newest first</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Count banner */}
-        <p style={{ fontSize: '14px', opacity: 0.6, margin: '0 0 24px 0' }}>
-          Showing {filtered.length} {filtered.length === 1 ? 'piece' : 'pieces'}
-        </p>
-
-        {/* Product grid */}
-        <ul className="grid" aria-live="polite">
-          {filtered.map((p) => {
-            const saved = isSaved(p.id);
-            return (
-              <li key={p.id} className="gcard" data-id={p.id}>
-                <Link className="gcard__link" href={`/product?id=${p.id}`} aria-label={`${p.name}, ${formatPrice(p.price)}`}>
-                  <figure>
-                    <img src={p.img} width="960" height="1280" alt={p.alt} loading="lazy" />
-                  </figure>
-                </Link>
-                <div className="gcard__top">
-                  <span className="gcard__tag">{p.terrain}</span>
-                  <button
-                    className="gcard__heart"
-                    type="button"
-                    aria-pressed={saved}
-                    onClick={() => toggleSave(p.id)}
-                    aria-label={`Save ${p.name}`}
-                  >
-                    <svg width="16" height="16" fill={saved ? 'currentColor' : 'none'}>
-                      <use href="#i-heart" />
-                    </svg>
-                  </button>
-                </div>
-                <div className="gcard__info">
-                  <h3 className="gcard__title">
-                    <Link href={`/product?id=${p.id}`}>{p.name}</Link>
-                  </h3>
-                  <p className="gcard__meta">
-                    <span>{p.color.name} · {p.gender}</span>
-                    <strong className="gcard__price">{formatPrice(p.price)}</strong>
-                  </p>
-                  <button
-                    className="pill pill--ink gcard__add"
-                    type="button"
-                    onClick={() => addToBag(p.id, 'M', 1)}
-                  >
-                    Add to bag
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+    <ul className="plist" data-list></ul>
+    <div className="empty" data-empty hidden>
+      <h2>Nothing on this trail</h2>
+      <p>No products match those filters.</p>
+      <button className="pill pill--ink" type="button" data-reset>Clear filters</button>
+    </div>
+  
       </main>
+
+      <footer className="footer" id="footer">
+  <p className="footer__big" data-scramble>See you<br />out there</p>
+  <div className="footer__cols">
+    <form className="join" noValidate>
+      <label className="join__label" htmlFor="join-email">First access to every drop</label>
+      <div className="join__row">
+        <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
+        <button className="pill pill--clay" type="submit">Join</button>
+      </div>
+      <p className="join__msg" role="status" aria-live="polite"></p>
+    </form>
+    <nav className="footer__links" aria-label="Footer">
+      <div><h3>Shop</h3><a href="/shop/">Shop all</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
+      <div><h3>Help</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
+      <div><h3>Company</h3><a href="/about/">Our story</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
+    </nav>
+  </div>
+  <div className="footer__base">
+    <span>© 2026 ANGADI Outdoor</span>
+    <span>Free returns within 60 days</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
     </div>
   );
 }
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div style={{ padding: '60px 20px', textAlign: 'center' }}>Loading shop...</div>}>
-      <ShopContent />
+    <Suspense fallback={<div className="page page--shop"></div>}>
+      <ShopInner />
     </Suspense>
   );
 }

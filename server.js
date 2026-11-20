@@ -120,7 +120,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\n> SOLUM Store replica running at:`);
+  console.log(`\n> ANGADI Store replica running at:`);
   console.log(`  http://localhost:${PORT}/`);
   console.log(`  http://localhost:${PORT}/solum/\n`);
 });

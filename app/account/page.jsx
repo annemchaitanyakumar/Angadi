@@ -1,163 +1,91 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import { useStore } from '@/context/StoreContext';
-import { PRODUCTS, formatPrice } from '@/lib/data';
+import { useEffect, Suspense } from 'react';
 
-export default function AccountPage() {
-  const { saved, addToBag, toggleSave } = useStore();
-  const [signedIn, setSignedIn] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function AccountInner() {
+  useEffect(() => {
+    document.documentElement.classList.add('js');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('rm');
+    }
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    if (email) setSignedIn(true);
-  };
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = '/assets/account-OlIZwzsI.js';
+    document.body.appendChild(script);
 
-  const savedProducts = PRODUCTS.filter((p) => saved.includes(p.id));
+    return () => {
+      script.remove();
+    };
+  }, []);
 
   return (
-    <div className="page-wrap">
-      <header className="page-header" style={{ padding: '24px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-        <Header />
-      </header>
+    <div className="page page--account">
+      
+      {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
 
-      <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 20px 80px' }}>
-        {!signedIn ? (
-          <div style={{ maxWidth: '440px', margin: '40px auto', background: '#f5f0e8', padding: '40px', borderRadius: '16px' }}>
-            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 8px 0', textAlign: 'center' }}>
-              Runner Sign In
-            </h1>
-            <p style={{ opacity: 0.7, fontSize: '14px', textAlign: 'center', marginBottom: '28px' }}>
-              Access your order history, saved trail gear and fast checkout.
-            </p>
 
-            <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }} htmlFor="acc-email">
-                  Email
-                </label>
-                <input
-                  id="acc-email"
-                  type="email"
-                  required
-                  placeholder="runner@trailmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.2)', font: 'inherit' }}
-                />
-              </div>
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
 
-              <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, marginBottom: '6px' }} htmlFor="acc-pass">
-                  Password
-                </label>
-                <input
-                  id="acc-pass"
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.2)', font: 'inherit' }}
-                />
-              </div>
+<header className="topbar" data-topbar>
+  <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
+  <a className="topbar__logo" href="/" aria-label="ANGADI home">ANGADI</a>
+  <nav className="topbar__links" aria-label="Main">
+    <a href="/shop/" data-nav="shop">Shop</a>
+    <a href="/shop/?gender=Women" data-nav="shop-women">Women</a>
+    <a href="/shop/?gender=Men" data-nav="shop-men">Men</a>
+    <a href="/#look">Lookbook</a>
+    <a href="/about/" data-nav="about">About</a>
+    <a href="/help/" data-nav="help">Help</a>
+  </nav>
+  <div className="topbar__actions">
+    <a className="iconbtn" href="/account/" data-nav="account" aria-label="Your account"><svg width="20" height="20"><use href="#i-user"/></svg></a>
+    <button className="iconbtn iconbtn--ink" type="button" data-open-bag aria-label="Open bag, 0 items">
+      <svg width="20" height="20"><use href="#i-bag"/></svg>
+      <span className="badge" data-bag-count hidden>0</span>
+    </button>
+  </div>
+</header>
 
-              <button className="pill pill--ink" type="submit" style={{ height: '48px', fontSize: '15px', marginTop: '8px' }}>
-                Sign In
-              </button>
-            </form>
 
-            <p style={{ textAlign: 'center', fontSize: '13px', opacity: 0.7, marginTop: '20px' }}>
-              New to ANGADI? Any email works in this demo.
-            </p>
-          </div>
-        ) : (
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-              <div>
-                <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '0 0 6px 0' }}>
-                  Welcome back, {email.split('@')[0]}
-                </h1>
-                <p style={{ opacity: 0.6, margin: 0, fontSize: '14px' }}>Member since 2024 · ANGADI Trail Club</p>
-              </div>
-              <button
-                className="pill pill--light"
-                type="button"
-                onClick={() => setSignedIn(false)}
-              >
-                Sign out
-              </button>
-            </div>
+  <main id="main">
+    <div data-account></div>
+  </main>
 
-            {/* Profile info */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '48px' }}>
-              <div style={{ background: '#f5f0e8', padding: '24px', borderRadius: '12px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 12px 0' }}>Profile Details</h3>
-                <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}><strong>Email:</strong> {email}</p>
-                <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}><strong>Default Shipping:</strong> Boulder, CO</p>
-                <p style={{ margin: 0, fontSize: '14px' }}><strong>Preferred Size:</strong> Medium (M)</p>
-              </div>
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
+<footer className="footer" id="footer">
+  <p className="footer__big" data-scramble>See you<br />out there</p>
+  <div className="footer__cols">
+    <form className="join" noValidate>
+      <label className="join__label" htmlFor="join-email">First access to every drop</label>
+      <div className="join__row">
+        <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
+        <button className="pill pill--clay" type="submit">Join</button>
+      </div>
+      <p className="join__msg" role="status" aria-live="polite"></p>
+    </form>
+    <nav className="footer__links" aria-label="Footer">
+      <div><h3>Shop</h3><a href="/shop/">Shop all</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
+      <div><h3>Help</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
+      <div><h3>Company</h3><a href="/about/">Our story</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
+    </nav>
+  </div>
+  <div className="footer__base">
+    <span>© 2026 ANGADI Outdoor</span>
+    <span>Free returns within 60 days</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
 
-              <div style={{ background: '#f5f0e8', padding: '24px', borderRadius: '12px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 12px 0' }}>Recent Orders</h3>
-                <p style={{ margin: '0 0 8px 0', fontSize: '14px' }}>
-                  <Link href="/order?id=AG-10942" style={{ textDecoration: 'underline', fontWeight: 600 }}>Order #AG-10942</Link> · Delivered
-                </p>
-                <p style={{ margin: 0, fontSize: '14px' }}>
-                  <Link href="/order?id=AG-10821" style={{ textDecoration: 'underline', fontWeight: 600 }}>Order #AG-10821</Link> · Delivered
-                </p>
-              </div>
-            </div>
-
-            {/* Saved items */}
-            <section>
-              <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 20px 0' }}>
-                Saved Wishlist ({savedProducts.length})
-              </h2>
-
-              {savedProducts.length === 0 ? (
-                <p style={{ opacity: 0.6 }}>No items saved yet. Tap the heart icon on any gear piece to save it.</p>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '20px' }}>
-                  {savedProducts.map((p) => (
-                    <div key={p.id} className="gcard" style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden' }}>
-                      <Link href={`/product?id=${p.id}`}>
-                        <img src={p.img} alt={p.name} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
-                      </Link>
-                      <div style={{ padding: '16px' }}>
-                        <h4 style={{ margin: '0 0 6px 0', fontSize: '15px' }}>{p.name}</h4>
-                        <p style={{ margin: '0 0 12px 0', fontWeight: 700 }}>{formatPrice(p.price)}</p>
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                          <button
-                            className="pill pill--ink"
-                            type="button"
-                            onClick={() => addToBag(p.id, 'M', 1)}
-                            style={{ flex: 1, padding: '0 12px', fontSize: '12px' }}
-                          >
-                            Add to bag
-                          </button>
-                          <button
-                            className="iconbtn"
-                            type="button"
-                            onClick={() => toggleSave(p.id)}
-                            aria-label="Remove from saved"
-                          >
-                            <svg width="16" height="16"><use href="#i-close" /></svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          </div>
-        )}
-      </main>
+  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
     </div>
+  );
+}
+
+export default function AccountPage() {
+  return (
+    <Suspense fallback={<div className="page page--account"></div>}>
+      <AccountInner />
+    </Suspense>
   );
 }
