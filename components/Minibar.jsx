@@ -46,10 +46,10 @@ export default function Minibar() {
       </Link>
 
       <nav className="minibar__links" aria-label="Quick">
-        <Link href="/shop">Shop</Link>
+        <Link href="/shop">Dukanam</Link>
         <Link href="/#look">Lookbook</Link>
-        <Link href="/about">About</Link>
-        <Link href="/help">Help</Link>
+        <Link href="/about">Maa Gurinchi</Link>
+        <Link href="/help">Sahayam</Link>
       </nav>
 
       <Link className="iconbtn" href="/account" aria-label="Your account">

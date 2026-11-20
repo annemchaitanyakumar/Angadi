@@ -25,12 +25,12 @@ function ProductInner() {
   <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
   <a className="topbar__logo" href="/" aria-label="ANGADI home">ANGADI</a>
   <nav className="topbar__links" aria-label="Main">
-    <a href="/shop/" data-nav="shop">Shop</a>
-    <a href="/shop/?gender=Women" data-nav="shop-women">Women</a>
-    <a href="/shop/?gender=Men" data-nav="shop-men">Men</a>
+    <a href="/shop/" data-nav="shop">Dukanam</a>
+    <a href="/shop/?gender=Women" data-nav="shop-women">Stree</a>
+    <a href="/shop/?gender=Men" data-nav="shop-men">Purush</a>
     <a href="/#look">Lookbook</a>
-    <a href="/about/" data-nav="about">About</a>
-    <a href="/help/" data-nav="help">Help</a>
+    <a href="/about/" data-nav="about">Maa Gurinchi</a>
+    <a href="/help/" data-nav="help">Sahayam</a>
   </nav>
   <div className="topbar__actions">
     <a className="iconbtn" href="/account/" data-nav="account" aria-label="Your account"><svg width="20" height="20"><use href="#i-user"/></svg></a>
@@ -63,9 +63,9 @@ function ProductInner() {
       <p className="join__msg" role="status" aria-live="polite"></p>
     </form>
     <nav className="footer__links" aria-label="Footer">
-      <div><h3>Shop</h3><a href="/shop/">Shop all</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
-      <div><h3>Help</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
-      <div><h3>Company</h3><a href="/about/">Our story</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
+      <div><h3>Dukanam</h3><a href="/shop/">Dukanam</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
+      <div><h3>Sahayam</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
+      <div><h3>Company</h3><a href="/about/">Maa Gurinchi</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
     </nav>
   </div>
   <div className="footer__base">

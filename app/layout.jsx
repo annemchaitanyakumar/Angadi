@@ -1,6 +1,7 @@
 import '@/styles/shell.css';
 import '@/styles/pages.css';
 import Icons from '@/components/Icons';
+import SoundProvider from '@/components/SoundProvider';
 import { StoreProvider } from '@/context/StoreContext';
 
 export const metadata = {
@@ -49,17 +50,18 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <SoundProvider />
         <a className="skip" href="#main">Skip to content</a>
         <Icons />
 
         <StoreProvider>
           {children}
 
-          {/* ══ BAG DRAWER ══════════════════════════════════════════════════ */}
+          {/* ══ BAG DRAWER (Butta) ══════════════════════════════════════════ */}
           <dialog className="bag" aria-labelledby="bag-h">
             <div className="bag__panel">
               <header className="bag__head">
-                <h2 id="bag-h">Your bag</h2>
+                <h2 id="bag-h">Mee Butta</h2>
                 <button className="iconbtn" type="button" data-close aria-label="Close bag">
                   <svg width="20" height="20"><use href="#i-close"/></svg>
                 </button>
@@ -70,14 +72,14 @@ export default function RootLayout({ children }) {
               </div>
               <ul className="bag__list" data-bag-list></ul>
               <div className="bag__empty" data-bag-empty>
-                <p>Your bag is empty. The trail is waiting.</p>
-                <a className="pill pill--ink" href="/shop">Shop all</a>
+                <p>Mee Butta khali ga undi. Trail meekosam vechi undi.</p>
+                <a className="pill pill--ink" href="/shop">Dukanam</a>
               </div>
               <footer className="bag__foot">
-                <p className="bag__total"><span>Subtotal</span><strong data-bag-total>USD 0.00</strong></p>
-                <p className="bag__ship">Shipping and tax are worked out at checkout.</p>
+                <p className="bag__total"><span>Subtotal</span><strong data-bag-total>₹0.00</strong></p>
+                <p className="bag__ship">Shipping mariyu tax checkout daggara lekkisthamu.</p>
                 <div className="bag__ctas">
-                  <a className="pill pill--light" href="/cart">View bag</a>
+                  <a className="pill pill--light" href="/cart">Butta Choodandi</a>
                   <a className="pill pill--ink" href="/checkout" data-checkout>Checkout</a>
                 </div>
               </footer>
@@ -100,18 +102,18 @@ export default function RootLayout({ children }) {
 
               <nav className="menu__nav" aria-label="Mobile">
                 <ol className="menu__list">
-                  <li><a className="menu__link" href="/shop"><span className="menu__no">01</span><span className="menu__label"><span>Shop all</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
-                  <li><a className="menu__link" href="/shop?gender=Women"><span className="menu__no">02</span><span className="menu__label"><span>Women</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
-                  <li><a className="menu__link" href="/shop?gender=Men"><span className="menu__no">03</span><span className="menu__label"><span>Men</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
+                  <li><a className="menu__link" href="/shop"><span className="menu__no">01</span><span className="menu__label"><span>Dukanam</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
+                  <li><a className="menu__link" href="/shop?gender=Women"><span className="menu__no">02</span><span className="menu__label"><span>Stree</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
+                  <li><a className="menu__link" href="/shop?gender=Men"><span className="menu__no">03</span><span className="menu__label"><span>Purush</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
                   <li><a className="menu__link" href="/#look"><span className="menu__no">04</span><span className="menu__label"><span>Lookbook</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
-                  <li><a className="menu__link" href="/about"><span className="menu__no">05</span><span className="menu__label"><span>Our story</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
+                  <li><a className="menu__link" href="/about"><span className="menu__no">05</span><span className="menu__label"><span>Maa Gurinchi</span></span><svg width="22" height="22" aria-hidden="true"><use href="#i-arrow-r"/></svg></a></li>
                 </ol>
               </nav>
 
               <div className="menu__feature">
                 <a className="menu__card" href="/shop?sort=new">
                   <img src="/photos/158-angadi/pick-2.jpg" width="1200" height="1600" alt="" loading="lazy" decoding="async" />
-                  <span className="menu__cardtext"><small>Just landed</small>New arrivals</span>
+                  <span className="menu__cardtext"><small>Kothaga Vachinavi</small>Kothaga Vachinavi</span>
                 </a>
                 <a className="menu__card" href="/shop?category=Jackets">
                   <img src="/photos/158-angadi/pick-1.jpg" width="1200" height="1600" alt="" loading="lazy" decoding="async" />
@@ -123,9 +125,9 @@ export default function RootLayout({ children }) {
                 <nav className="menu__sub" aria-label="More">
                   <a href="/account"><svg width="18" height="18" aria-hidden="true"><use href="#i-user"/></svg>Account</a>
                   <a href="/order"><svg width="18" height="18" aria-hidden="true"><use href="#i-truck"/></svg>Track an order</a>
-                  <a href="/help"><svg width="18" height="18" aria-hidden="true"><use href="#i-return"/></svg>Help &amp; returns</a>
+                  <a href="/help"><svg width="18" height="18" aria-hidden="true"><use href="#i-return"/></svg>Sahayam &amp; returns</a>
                 </nav>
-                <p className="menu__note">Free shipping over USD 150 · Free returns within 60 days</p>
+                <p className="menu__note">Free shipping over ₹1,500 · Free returns within 60 days</p>
               </footer>
             </div>
           </dialog>

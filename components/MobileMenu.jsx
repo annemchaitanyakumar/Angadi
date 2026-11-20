@@ -114,7 +114,7 @@ export default function MobileMenu() {
               <svg width="18" height="18" aria-hidden="true"><use href="#i-return"/></svg>Help &amp; returns
             </Link>
           </nav>
-          <p className="menu__note">Free shipping over USD 150 · Free returns within 60 days</p>
+          <p className="menu__note">Free shipping over INR 150 · Free returns within 60 days</p>
         </footer>
       </div>
     </dialog>

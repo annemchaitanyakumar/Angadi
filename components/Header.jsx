@@ -20,9 +20,9 @@ export default function Header() {
       </button>
 
       <ul className="nav__links nav__links--l">
-        <li><Link href="/shop">Shop</Link></li>
-        <li><Link href="/shop?gender=Women">Women</Link></li>
-        <li><Link href="/shop?gender=Men">Men</Link></li>
+        <li><Link href="/shop">Dukanam</Link></li>
+        <li><Link href="/shop?gender=Women">Stree</Link></li>
+        <li><Link href="/shop?gender=Men">Purush</Link></li>
         <li><Link href="/#trail">Trail</Link></li>
       </ul>
 
