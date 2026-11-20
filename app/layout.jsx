@@ -65,8 +65,8 @@ export default function RootLayout({ children }) {
           {children}
 
           {/* ══ BAG DRAWER (Butta) ══════════════════════════════════════════ */}
-          <dialog className="bag" aria-labelledby="bag-h">
-            <div className="bag__panel">
+          <dialog className="bag" aria-labelledby="bag-h" data-lenis-prevent="true">
+            <div className="bag__panel" data-lenis-prevent="true">
               <header className="bag__head">
                 <h2 id="bag-h">Mee Butta</h2>
                 <button className="iconbtn" type="button" data-close aria-label="Close bag">
@@ -77,7 +77,7 @@ export default function RootLayout({ children }) {
                 <p className="ship__text" data-ship-text></p>
                 <span className="ship__track"><i data-ship-fill></i></span>
               </div>
-              <ul className="bag__list" data-bag-list></ul>
+              <ul className="bag__list" data-bag-list data-lenis-prevent="true"></ul>
               <div className="bag__empty" data-bag-empty>
                 <p>Mee Butta khali ga undi. Trail meekosam vechi undi.</p>
                 <a className="pill pill--ink" href="/shop">Dukanam</a>
@@ -94,8 +94,8 @@ export default function RootLayout({ children }) {
           </dialog>
 
           {/* ══ MOBILE MENU ═════════════════════════════════════════════════ */}
-          <dialog className="menu" id="menu" aria-label="Menu">
-            <div className="menu__panel">
+          <dialog className="menu" id="menu" aria-label="Menu" data-lenis-prevent="true">
+            <div className="menu__panel" data-lenis-prevent="true">
               <header className="menu__head">
                 <a className="menu__brand" href="/">ANGADI</a>
                 <button className="iconbtn iconbtn--ink" type="button" data-open-bag aria-label="Open bag, 0 items">
