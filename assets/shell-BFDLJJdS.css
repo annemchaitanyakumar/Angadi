@@ -3,49 +3,51 @@
 
 
 
-/* ═══ MODERN MINIMALIST CUSTOM SCROLLBARS ════════════════════════════════ */
-/* Firefox only: thin subtle scrollbars without arrows */
-@supports (-moz-appearance: none) {
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(46, 58, 47, 0.28) transparent;
-  }
+
+/* ═══ HIDE ALL SCROLLBARS GLOBALLY & IN DRAWERS ═══════════════════════════ */
+/* Keep 100% smooth scrolling active while hiding visual scrollbars completely */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
-/* Chromium (Chrome, Edge, Brave) and WebKit (Safari): sleek pill scrollbars, ZERO OS arrows, ZERO grey track */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(46, 58, 47, 0.25) !important;
-  border-radius: 999px !important;
-  border: 1px solid transparent !important;
-  background-clip: padding-box !important;
-  transition: background-color 0.25s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(46, 58, 47, 0.6) !important;
-}
-
-/* HIDE ALL DEFAULT OS ARROW BUTTONS ON WINDOWS */
-::-webkit-scrollbar-button {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
 
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-button,
 ::-webkit-scrollbar-corner {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
   background: transparent !important;
 }
 
-/* ═══ BAG DRAWER (Butta) SCROLL CONTAINER FIX ═════════════════════════════ */
+/* ═══ HIDE HORIZONTAL RED BAR (Shipping Track) ════════════════════════════ */
+.ship__track,
+[data-ship-fill] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.ship {
+  padding: 14px 0 4px !important;
+}
+
+.ship__text {
+  margin-bottom: 0 !important;
+}
+
+/* ═══ BAG DRAWER (Butta) SCROLL CONTAINER ═════════════════════════════════ */
 dialog.bag {
   background: 0 0;
   width: min(460px, 100vw);
@@ -88,39 +90,11 @@ dialog.bag {
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
-/* Ultra-sleek 4px pill scrollbar inside cart drawer and mobile menu */
-.bag__list::-webkit-scrollbar,
-.menu__panel::-webkit-scrollbar,
-.table-wrap::-webkit-scrollbar,
-.chips::-webkit-scrollbar,
-.hnav::-webkit-scrollbar {
-  width: 4px !important;
-  height: 4px !important;
-}
-
-.bag__list::-webkit-scrollbar-track,
-.menu__panel::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-.bag__list::-webkit-scrollbar-thumb,
-.menu__panel::-webkit-scrollbar-thumb,
-.table-wrap::-webkit-scrollbar-thumb,
-.chips::-webkit-scrollbar-thumb,
-.hnav::-webkit-scrollbar-thumb {
-  background-color: rgba(46, 58, 47, 0.22) !important;
-  border-radius: 999px !important;
-}
-
-.bag__list::-webkit-scrollbar-thumb:hover,
-.menu__panel::-webkit-scrollbar-thumb:hover {
-  background-color: var(--c-moss, #2e3a2f) !important;
-}
-
-.bag__list::-webkit-scrollbar-button,
-.menu__panel::-webkit-scrollbar-button {
+.bag__list::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
