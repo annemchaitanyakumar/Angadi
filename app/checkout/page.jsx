@@ -11,7 +11,7 @@ function CheckoutInner() {
 
     const script = document.createElement('script');
     script.type = 'module';
-    script.src = '/assets/checkout-ByhCbv3R.js';
+    script.src = `/assets/checkout-ByhCbv3R.js?v=${Date.now()}`;
     document.body.appendChild(script);
 
     return () => {

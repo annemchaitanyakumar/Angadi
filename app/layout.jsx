@@ -39,6 +39,11 @@ export default function RootLayout({ children }) {
                 if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
                 setTimeout(function () { d.classList.add('failsafe'); }, 4000);
               })(document.documentElement);
+              window.addEventListener('error', function (e) {
+                if (e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
+                  window.location.reload();
+                }
+              });
             `
           }}
         />
