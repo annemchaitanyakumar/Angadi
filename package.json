@@ -1,20 +1,16 @@
 {
-  "name": "solum-storefront",
+  "name": "angadi-storefront",
   "version": "1.0.0",
-  "description": "Exact replica of SOLUM — Trail & Outdoor Running Apparel e-commerce storefront",
-  "main": "server.js",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "serve": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "solum",
-    "ecommerce",
-    "outdoor",
-    "trail-running",
-    "storefront"
-  ],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
 }
