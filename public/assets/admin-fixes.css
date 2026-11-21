@@ -1,0 +1,1802 @@
+/* ==========================================================================
+   ANGADI ADMIN: PIXEL-PERFECT DESIGN SYSTEM ENFORCEMENT & FIXES
+   Overrides any storefront CSS leakage and enforces exact administrative styling
+   ========================================================================== */
+
+/* 1. Global Admin Typography, Theme Variables & Root Reset */
+.page--admin {
+  --font-display: "Archivo", "Arial Narrow", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bone: #ece6dc;
+  --surface: #f4f0e9;
+  --card: #fbf9f5;
+  --field: #fffdf9;
+  --moss: #2e3a2f;
+  --moss-deep: #243025;
+  --clay: #b5562f;
+  --clay-ink: #9a4423;
+  --clay-soft: #e9a27d;
+  --cream: #f4efe6;
+  --cream-2: #cfcbbf;
+  --muted: #625d54;
+  --good: #2f6b3a;
+  --line: rgba(46, 58, 47, 0.14);
+  --line-2: rgba(46, 58, 47, 0.24);
+  --hover: rgba(46, 58, 47, 0.04);
+  --st-pending-bg: #f6e6bf;
+  --st-pending-tx: #5e4300;
+  --st-processing-bg: #dfe6ee;
+  --st-processing-tx: #2c4560;
+  --st-shipped-bg: #e2e7da;
+  --st-shipped-tx: #2e3a2f;
+  --st-delivered-bg: #d5ebd2;
+  --st-delivered-tx: #1e5228;
+  --st-cancelled-bg: #e7e3dd;
+  --st-cancelled-tx: #4f4b45;
+  --st-refunded-bg: #f5ded3;
+  --st-refunded-tx: #86391b;
+  --fs-xs: .8125rem;
+  --fs-sm: .875rem;
+  --fs-md: .9375rem;
+  --fs-lg: 1rem;
+  --gut: clamp(16px, 2.6vw, 36px);
+  --r-lg: 20px;
+  --r: 14px;
+  --r-sm: 10px;
+  --shadow: 0 1px 0 rgba(46, 58, 47, 0.04), 0 10px 28px -18px rgba(46, 58, 47, 0.28);
+  --shadow-lift: 0 2px 0 rgba(46, 58, 47, 0.04), 0 22px 40px -22px rgba(46, 58, 47, 0.38);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --side-w: 248px;
+
+  font-family: var(--font-body) !important;
+  font-size: var(--fs-md) !important;
+  color: var(--moss) !important;
+  background: var(--bone) !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+}
+
+
+
+/* ==========================================================================
+   CUSTOM FLOATING DROPDOWN SYSTEM (ANGADI DESIGN SYSTEM)
+   Replaces native browser pickers with styled warm-toned dropdown menus
+   ========================================================================== */
+.solum-dropdown-menu {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  background: #fbf9f5 !important;
+  border: 1px solid rgba(46, 58, 47, 0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 42px -8px rgba(46, 58, 47, 0.28), 0 6px 16px rgba(46, 58, 47, 0.08) !important;
+  padding: 6px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  font-family: var(--font-body, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  animation: solumDropdownIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: top center;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(46, 58, 47, 0.2) transparent !important;
+}
+
+@keyframes solumDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.solum-dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  display: block !important;
+}
+
+.solum-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(46, 58, 47, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.solum-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #2e3a2f !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+}
+
+.solum-dropdown-item:hover,
+.solum-dropdown-item.is-focused {
+  background: rgba(46, 58, 47, 0.07) !important;
+  color: #2e3a2f !important;
+}
+
+.solum-dropdown-item.is-selected {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.solum-dropdown-item .solum-check-icon {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+}
+
+.solum-dropdown-text {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.page--admin *,
+.page--admin *::before,
+.page--admin *::after {
+  box-sizing: border-box !important;
+}
+
+
+
+/* ==========================================================================
+   CUSTOM FLOATING DROPDOWN SYSTEM (ANGADI DESIGN SYSTEM)
+   Replaces native browser pickers with styled warm-toned dropdown menus
+   ========================================================================== */
+.solum-dropdown-menu {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  background: #fbf9f5 !important;
+  border: 1px solid rgba(46, 58, 47, 0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 42px -8px rgba(46, 58, 47, 0.28), 0 6px 16px rgba(46, 58, 47, 0.08) !important;
+  padding: 6px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  font-family: var(--font-body, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  animation: solumDropdownIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: top center;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(46, 58, 47, 0.2) transparent !important;
+}
+
+@keyframes solumDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.solum-dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  display: block !important;
+}
+
+.solum-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(46, 58, 47, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.solum-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #2e3a2f !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+}
+
+.solum-dropdown-item:hover,
+.solum-dropdown-item.is-focused {
+  background: rgba(46, 58, 47, 0.07) !important;
+  color: #2e3a2f !important;
+}
+
+.solum-dropdown-item.is-selected {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.solum-dropdown-item .solum-check-icon {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+}
+
+.solum-dropdown-text {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 2. Main Workspace Layout — Generous breathing room below the top horizontal line */
+.page--admin main,
+.page--admin .main {
+  padding: 32px var(--gut) 80px !important;
+  margin: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  flex: 1 !important;
+}
+
+.page--admin .view {
+  margin-top: 0 !important;
+  gap: 24px !important;
+  display: grid !important;
+}
+
+.page--admin .toolbar,
+.page--admin .editbar {
+  margin-top: 0 !important;
+  margin-bottom: 24px !important;
+}
+
+/* 3. Top Header Bar */
+.page--admin .top {
+  z-index: 20 !important;
+  padding: 18px var(--gut) 16px !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.15) !important;
+  backdrop-filter: blur(14px) saturate(1.15) !important;
+  border-bottom: 1px solid var(--line) !important;
+  background: rgba(236, 230, 220, 0.9) !important;
+  align-items: center !important;
+  gap: 16px !important;
+  display: flex !important;
+  position: sticky !important;
+  top: 0 !important;
+  height: auto !important;
+  box-shadow: none !important;
+}
+
+.page--admin .top__title {
+  font-family: var(--font-display) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .005em !important;
+  margin-right: auto !important;
+  font-size: clamp(1.35rem, 1.9vw, 1.8rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: var(--moss) !important;
+}
+
+.page--admin .top__actions {
+  align-items: center !important;
+  gap: 10px !important;
+  display: flex !important;
+}
+
+.page--admin .top__search {
+  border: 1px solid var(--line-2) !important;
+  background: var(--card) !important;
+  min-width: 240px !important;
+  height: 40px !important;
+  color: var(--muted) !important;
+  font-size: var(--fs-md) !important;
+  border-radius: 999px !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 10px 0 14px !important;
+  display: inline-flex !important;
+  cursor: pointer !important;
+}
+
+.page--admin .top__search:hover {
+  border-color: var(--moss) !important;
+  color: var(--moss) !important;
+}
+
+.page--admin .top__kbd {
+  margin-left: auto !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--line-2) !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  font-family: var(--font-body) !important;
+  color: var(--muted) !important;
+}
+
+/* 4. Icon Buttons */
+.page--admin .iconbtn {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  color: var(--moss) !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: none !important;
+  position: relative !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: background-color .2s, border-color .2s, transform .18s var(--ease-out) !important;
+}
+
+.page--admin .iconbtn:hover {
+  background: var(--surface) !important;
+  border-color: var(--line-2) !important;
+}
+
+.page--admin .iconbtn--sm {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  min-height: 34px !important;
+}
+
+/* ==========================================================================
+   PRODUCT CARDS IN ADMIN (Crisp dark moss typography)
+   ========================================================================== */
+.page--admin .pgrid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  gap: 20px !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.page--admin .pcard {
+  aspect-ratio: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  background: transparent !important;
+  color: var(--moss) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: block !important;
+  position: relative !important;
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+
+.page--admin .pcard::after {
+  display: none !important;
+}
+
+.page--admin .pcard__link {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r-lg) !important;
+  height: 100% !important;
+  box-shadow: var(--shadow) !important;
+  flex-direction: column !important;
+  display: flex !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: var(--moss) !important;
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s !important;
+}
+
+.page--admin .pcard__link:hover {
+  box-shadow: var(--shadow-lift) !important;
+  border-color: var(--line-2) !important;
+  transform: translateY(-3px) !important;
+}
+
+.page--admin .pcard__media {
+  aspect-ratio: 4/3 !important;
+  background: #2b2e2a !important;
+  display: block !important;
+  overflow: hidden !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.page--admin .pcard__media img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  transition: transform .9s var(--ease-out) !important;
+}
+
+.page--admin .pcard__body {
+  gap: 6px !important;
+  padding: 14px 16px 16px !important;
+  display: grid !important;
+  background: var(--card) !important;
+}
+
+.page--admin .pcard__top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 6px 8px !important;
+}
+
+.page--admin .pcard__cat {
+  font-size: var(--fs-xs) !important;
+  color: var(--muted) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+.page--admin .pcard__name {
+  font-size: var(--fs-md) !important;
+  font-weight: 600 !important;
+  color: var(--moss) !important;
+  line-height: 1.3 !important;
+  display: block !important;
+  text-decoration: none !important;
+}
+
+.page--admin .pcard__meta {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important;
+  gap: 4px 10px !important;
+  margin-top: 4px !important;
+}
+
+.page--admin .pcard__price {
+  font-variant-numeric: tabular-nums !important;
+  font-weight: 600 !important;
+  font-size: var(--fs-md) !important;
+  color: var(--moss) !important;
+}
+
+.page--admin .pcard__price s {
+  color: var(--muted) !important;
+  margin-left: 4px !important;
+  font-weight: 400 !important;
+  font-size: var(--fs-xs) !important;
+}
+
+.page--admin .pcard__stock {
+  font-size: var(--fs-xs) !important;
+  color: var(--muted) !important;
+}
+
+/* ==========================================================================
+   SEGMENTED CONTROLS / DATE RANGE & VIEW TOGGLES (Cream on dark moss)
+   ========================================================================== */
+.page--admin .seg {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 999px !important;
+  gap: 2px !important;
+  padding: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  position: relative !important;
+  width: auto !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+}
+
+.page--admin .seg__thumb {
+  z-index: 0 !important;
+  background: var(--moss) !important;
+  border-radius: 999px !important;
+  height: 34px !important;
+  position: absolute !important;
+  top: 4px !important;
+  left: 0 !important;
+  box-shadow: 0 4px 12px -6px rgba(46, 58, 47, 0.6) !important;
+  pointer-events: none !important;
+}
+
+.page--admin .seg__btn {
+  z-index: 1 !important;
+  height: 34px !important;
+  font-size: var(--fs-sm) !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 0 16px !important;
+  font-weight: 500 !important;
+  transition: color .2s !important;
+  display: inline-flex !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  position: relative !important;
+}
+
+.page--admin .seg__btn:hover {
+  color: var(--moss) !important;
+}
+
+.page--admin .seg__btn[aria-pressed="true"],
+.page--admin .seg__btn[aria-checked="true"],
+.page--admin .seg__btn.is-active {
+  color: var(--cream) !important;
+  font-weight: 600 !important;
+}
+
+.page--admin .seg__btn[aria-pressed="true"] svg,
+.page--admin .seg__btn[aria-pressed="true"] .ic,
+.page--admin .seg__btn[aria-checked="true"] svg,
+.page--admin .seg__btn.is-active svg {
+  color: var(--cream) !important;
+  stroke: var(--cream) !important;
+}
+
+.page--admin .seg__btn[aria-pressed="false"],
+.page--admin .seg__btn:not([aria-pressed="true"]) {
+  color: var(--muted) !important;
+}
+
+.page--admin .seg__btn[aria-pressed="false"] svg,
+.page--admin .seg__btn[aria-pressed="false"] .ic,
+.page--admin .seg__btn:not([aria-pressed="true"]) svg {
+  color: var(--muted) !important;
+  stroke: var(--muted) !important;
+}
+
+.page--admin .seg--icons .seg__btn {
+  padding: 0 14px !important;
+}
+
+/* ==========================================================================
+   TABS FILTER STRIP IN ORDERS
+   ========================================================================== */
+.page--admin .tabs-wrap {
+  margin: 0 calc(var(--gut) * -1) 20px !important;
+  padding: 0 var(--gut) !important;
+  border-bottom: 1px solid var(--line-2) !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  display: block !important;
+}
+
+.page--admin .tabs-wrap::-webkit-scrollbar {
+  display: none !important;
+}
+
+.page--admin .tabs {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  gap: 4px !important;
+  min-width: max-content !important;
+  display: flex !important;
+  position: relative !important;
+  width: auto !important;
+  box-shadow: none !important;
+}
+
+.page--admin .tab {
+  height: 44px !important;
+  font-size: var(--fs-md) !important;
+  color: var(--muted) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 8px 8px 0 0 !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  font-weight: 500 !important;
+  transition: color .2s !important;
+  display: inline-flex !important;
+  cursor: pointer !important;
+  position: relative !important;
+  white-space: nowrap !important;
+}
+
+.page--admin .tab:hover {
+  color: var(--moss) !important;
+}
+
+.page--admin .tab[aria-pressed="true"] {
+  color: var(--moss) !important;
+  font-weight: 600 !important;
+}
+
+.page--admin .tab__n {
+  font-variant-numeric: tabular-nums !important;
+  text-align: center !important;
+  background: rgba(46, 58, 47, 0.08) !important;
+  border-radius: 999px !important;
+  min-width: 22px !important;
+  padding: 2px 7px !important;
+  font-size: .75rem !important;
+  font-weight: 600 !important;
+  color: var(--muted) !important;
+  transition: background-color .2s, color .2s !important;
+  display: inline-block !important;
+}
+
+.page--admin .tab[aria-pressed="true"] .tab__n {
+  background: var(--moss) !important;
+  color: var(--cream) !important;
+}
+
+.page--admin .tabs__line {
+  background: var(--clay) !important;
+  transform-origin: 0 !important;
+  border-radius: 2px !important;
+  width: 100px !important;
+  height: 2.5px !important;
+  position: absolute !important;
+  bottom: 0px !important;
+  left: 0 !important;
+  z-index: 2 !important;
+}
+
+/* ==========================================================================
+   TOOLBAR & SEARCH BAR
+   ========================================================================== */
+.page--admin .toolbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-top: 0 !important;
+  margin-bottom: 24px !important;
+  padding-bottom: 0 !important;
+  border-bottom: 0 !important;
+  position: static !important;
+}
+
+.page--admin .toolbar .search {
+  flex: 1 1 260px !important;
+  max-width: 400px !important;
+  position: relative !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.page--admin .search input {
+  width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  padding: 0 16px 0 42px !important;
+  font-size: var(--fs-sm) !important;
+  font-family: var(--font-body) !important;
+  border: 1px solid var(--line-2) !important;
+  background: var(--field) !important;
+  color: var(--moss) !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  transition: border-color .2s, box-shadow .2s !important;
+}
+
+.page--admin .search input:hover {
+  border-color: rgba(46, 58, 47, 0.4) !important;
+}
+
+.page--admin .search input:focus-visible {
+  border-color: var(--clay) !important;
+  outline: 2px solid var(--clay) !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 0 3px rgba(181, 86, 47, 0.15) !important;
+}
+
+.page--admin .search svg,
+.page--admin .search .ic {
+  position: absolute !important;
+  top: 50% !important;
+  left: 14px !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+  pointer-events: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--muted) !important;
+}
+
+/* ==========================================================================
+   DROPDOWN & SELECT SYSTEM (Refined, Native-Friendly, No Harsh Focus Rings)
+   ========================================================================== */
+select {
+  color-scheme: light !important;
+}
+
+select option {
+  background-color: #fbf9f5 !important;
+  color: #2e3a2f !important;
+  font-family: var(--font-body), sans-serif !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+}
+
+select option:checked {
+  background-color: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.page--admin .select {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: var(--fs-xs) !important;
+  color: var(--muted) !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  position: relative !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  height: 42px !important;
+  vertical-align: middle !important;
+}
+
+.page--admin .select>span {
+  font-size: 11px !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+/* Toolbar filter & sort selects (pill shape) */
+.page--admin .select select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: var(--surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--line-2) !important;
+  border-radius: 999px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 0 38px 0 16px !important;
+  font-size: var(--fs-sm) !important;
+  font-weight: 500 !important;
+  font-family: var(--font-body) !important;
+  color: var(--moss) !important;
+  cursor: pointer !important;
+  width: auto !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  line-height: 40px !important;
+  box-sizing: border-box !important;
+  transition: border-color .2s, background-color .2s, box-shadow .2s !important;
+  color-scheme: light !important;
+  vertical-align: middle !important;
+}
+
+.page--admin .select select:hover {
+  border-color: var(--moss) !important;
+  background-color: var(--card) !important;
+}
+
+.page--admin .select select:focus,
+.page--admin .select select:focus-visible {
+  outline: none !important;
+  border-color: var(--moss) !important;
+  background-color: var(--card) !important;
+  box-shadow: 0 0 0 3px rgba(46, 58, 47, 0.14) !important;
+}
+
+.page--admin .select>.ic,
+.page--admin .select>svg {
+  position: absolute !important;
+  right: 13px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+  color: var(--muted) !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 !important;
+}
+
+/* Full-width select inside drawer or forms (Basics / Details: Category, Terrain) */
+.page--admin .select--full {
+  display: flex !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+.page--admin .select--full select,
+.page--admin .field select {
+  width: 100% !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 12px !important;
+  padding: 0 38px 0 14px !important;
+  line-height: 42px !important;
+  font-size: var(--fs-md) !important;
+  font-weight: 500 !important;
+  font-family: var(--font-body) !important;
+  background: var(--field) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--moss) !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: none !important;
+  transition: border-color .2s, background-color .2s, box-shadow .2s !important;
+  vertical-align: middle !important;
+}
+
+.page--admin .select--full select:hover,
+.page--admin .field select:hover {
+  border-color: var(--moss) !important;
+}
+
+.page--admin .select--full select:focus,
+.page--admin .field select:focus,
+.page--admin .select--full select:focus-visible,
+.page--admin .field select:focus-visible {
+  outline: none !important;
+  border-color: var(--moss) !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(46, 58, 47, 0.14) !important;
+}
+
+/* 5. Buttons */
+.page--admin .btn {
+  height: 42px !important;
+  font-size: var(--fs-md) !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+  transition: background-color .2s, color .2s, border-color .2s, transform .18s var(--ease-out) !important;
+}
+
+.page--admin .btn:active {
+  transform: scale(.97) !important;
+}
+
+.page--admin .btn--dark {
+  background: var(--moss) !important;
+  color: var(--cream) !important;
+}
+
+.page--admin .btn--dark:hover {
+  background: var(--moss-deep) !important;
+}
+
+.page--admin .btn--ghost {
+  border-color: var(--line-2) !important;
+  color: var(--moss) !important;
+  background: transparent !important;
+}
+
+.page--admin .btn--ghost:hover {
+  background: var(--hover) !important;
+  border-color: rgba(46, 58, 47, 0.38) !important;
+}
+
+.page--admin .btn--danger {
+  color: var(--cream) !important;
+  background: #8f3a1b !important;
+}
+
+.page--admin .btn--danger:hover {
+  background: #7a3015 !important;
+}
+
+.page--admin .btn--lg {
+  height: 48px !important;
+  font-size: var(--fs-lg) !important;
+  padding: 0 24px !important;
+}
+
+.page--admin .btn--block {
+  width: 100% !important;
+}
+
+/* 6. Status Badges & Pills */
+.page--admin .badge {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: auto !important;
+  height: auto !important;
+  padding: 3px 9px !important;
+  border-radius: 999px !important;
+  font-size: var(--fs-xs) !important;
+  top: auto !important;
+  right: auto !important;
+  font-weight: 600 !important;
+}
+
+.page--admin .badge--in {
+  background: #d5ebd2 !important;
+  color: #1e5228 !important;
+}
+
+.page--admin .badge--low {
+  background: #f6e6bf !important;
+  color: #5e4300 !important;
+}
+
+.page--admin .badge--out {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+}
+
+.page--admin .side__badge {
+  position: absolute !important;
+  top: 50% !important;
+  right: 12px !important;
+  transform: translateY(-50%) !important;
+  padding: 2px 7px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  background: var(--clay) !important;
+  color: #fff !important;
+}
+
+.page--admin .pill {
+  height: 28px !important;
+  min-height: 28px !important;
+  font-size: var(--fs-xs) !important;
+  padding: 0 10px !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-weight: 500 !important;
+}
+
+.page--admin .pill--pending {
+  background: #f6e6bf !important;
+  color: #5e4300 !important;
+}
+
+.page--admin .pill--processing {
+  background: #dfe6ee !important;
+  color: #2c4560 !important;
+}
+
+.page--admin .pill--shipped {
+  background: #e2e7da !important;
+  color: #2e3a2f !important;
+}
+
+.page--admin .pill--delivered {
+  background: #d5ebd2 !important;
+  color: #1e5228 !important;
+}
+
+.page--admin .pill--cancelled {
+  background: #e7e3dd !important;
+  color: #4f4b45 !important;
+}
+
+.page--admin .pill--refunded {
+  background: #f5ded3 !important;
+  color: #86391b !important;
+}
+
+/* 7. Tables */
+.page--admin .tbl {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.page--admin .tbl th,
+.page--admin .tbl td {
+  padding: 14px 16px !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+}
+
+.page--admin .tbl th {
+  font-size: var(--fs-xs) !important;
+  color: var(--muted) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+
+.page--admin .tbl .num {
+  text-align: right !important;
+}
+
+.page--admin .tbl tbody tr {
+  border-bottom: 1px solid var(--line) !important;
+  transition: background-color .15s !important;
+}
+
+.page--admin .tbl tbody tr:hover {
+  background: var(--surface) !important;
+}
+
+/* 8. KPI Grid & Cards */
+.page--admin .card {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  border-radius: var(--r) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.page--admin .card--pad {
+  padding: 18px 20px 20px !important;
+}
+
+/* 9. Form Fields, Modals / Drawers & Components */
+.page--admin .fgrid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px 20px !important;
+}
+
+@media (max-width: 640px) {
+  .page--admin .fgrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.page--admin .field {
+  display: grid !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+  margin-top: 14px !important;
+}
+
+.page--admin .field label,
+.page--admin .field__label {
+  font-size: var(--fs-sm) !important;
+  font-weight: 500 !important;
+  color: var(--moss) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.page--admin .field input:not([type="color"]):not([type="radio"]):not([type="checkbox"]) {
+  width: 100% !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  font-size: var(--fs-md) !important;
+  font-family: var(--font-body) !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  line-height: 42px !important;
+  background: var(--field) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--moss) !important;
+  box-sizing: border-box !important;
+  transition: border-color .2s, box-shadow .2s, background-color .2s !important;
+}
+
+.page--admin .field input:hover {
+  border-color: rgba(46, 58, 47, 0.4) !important;
+}
+
+.page--admin .field input:focus,
+.page--admin .field input:focus-visible {
+  outline: none !important;
+  border-color: var(--moss) !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(46, 58, 47, 0.14) !important;
+}
+
+.page--admin .field textarea {
+  width: 100% !important;
+  min-height: 120px !important;
+  font-size: var(--fs-md) !important;
+  font-family: var(--font-body) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  line-height: 1.55 !important;
+  background: var(--field) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--moss) !important;
+  box-sizing: border-box !important;
+  resize: vertical !important;
+  transition: border-color .2s, box-shadow .2s, background-color .2s !important;
+}
+
+.page--admin .field textarea:hover {
+  border-color: rgba(46, 58, 47, 0.4) !important;
+}
+
+.page--admin .field textarea:focus,
+.page--admin .field textarea:focus-visible {
+  outline: none !important;
+  border-color: var(--moss) !important;
+  background-color: #fff !important;
+  box-shadow: 0 0 0 3px rgba(46, 58, 47, 0.14) !important;
+}
+
+/* Affix inputs (Price INR, Compare-at INR) */
+.page--admin .affix {
+  position: relative !important;
+  width: 100% !important;
+}
+
+.page--admin .affix>span {
+  font-size: var(--fs-sm) !important;
+  color: var(--muted) !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: 14px !important;
+  line-height: 1 !important;
+  font-weight: 500 !important;
+}
+
+.page--admin .affix input {
+  padding-left: 50px !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* Radios in Admin (Gender selection) */
+.page--admin .radios__row {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+.page--admin .radio {
+  position: relative !important;
+  display: inline-flex !important;
+  cursor: pointer !important;
+}
+
+.page--admin .radio input {
+  opacity: 0 !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  z-index: 1 !important;
+}
+
+.page--admin .radio span {
+  border: 1px solid var(--line-2) !important;
+  background: var(--field) !important;
+  border-radius: 999px !important;
+  align-items: center !important;
+  height: 40px !important;
+  padding: 0 18px !important;
+  font-weight: 500 !important;
+  font-size: var(--fs-sm) !important;
+  color: var(--moss) !important;
+  display: inline-flex !important;
+  transition: background-color .2s, color .2s, border-color .2s !important;
+}
+
+.page--admin .radio input:checked+span {
+  background: var(--moss) !important;
+  color: var(--cream) !important;
+  border-color: var(--moss) !important;
+  font-weight: 600 !important;
+}
+
+/* Colour Swatch component */
+.page--admin .swatch {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.page--admin .swatch input[type="color"] {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  padding: 3px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--line-2) !important;
+  background: var(--field) !important;
+  cursor: pointer !important;
+  flex: 0 0 44px !important;
+  box-sizing: border-box !important;
+}
+
+
+
+/* ==========================================================================
+   CUSTOM FLOATING DROPDOWN SYSTEM (ANGADI DESIGN SYSTEM)
+   Replaces native browser pickers with styled warm-toned dropdown menus
+   ========================================================================== */
+.solum-dropdown-menu {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  background: #fbf9f5 !important;
+  border: 1px solid rgba(46, 58, 47, 0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 42px -8px rgba(46, 58, 47, 0.28), 0 6px 16px rgba(46, 58, 47, 0.08) !important;
+  padding: 6px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  font-family: var(--font-body, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  animation: solumDropdownIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: top center;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(46, 58, 47, 0.2) transparent !important;
+}
+
+@keyframes solumDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.solum-dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  display: block !important;
+}
+
+.solum-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(46, 58, 47, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.solum-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #2e3a2f !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+}
+
+.solum-dropdown-item:hover,
+.solum-dropdown-item.is-focused {
+  background: rgba(46, 58, 47, 0.07) !important;
+  color: #2e3a2f !important;
+}
+
+.solum-dropdown-item.is-selected {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.solum-dropdown-item .solum-check-icon {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+}
+
+.solum-dropdown-text {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.page--admin .swatch input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0 !important;
+}
+
+.page--admin .swatch input[type="color"]::-webkit-color-swatch {
+  border: 0 !important;
+  border-radius: 8px !important;
+}
+
+.page--admin .swatch input[type="text"] {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 120px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  line-height: 42px !important;
+  background: var(--field) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--moss) !important;
+  font-size: var(--fs-md) !important;
+  text-transform: uppercase !important;
+  font-variant-numeric: tabular-nums !important;
+  font-family: var(--font-body) !important;
+  box-sizing: border-box !important;
+}
+
+
+
+/* ==========================================================================
+   CUSTOM FLOATING DROPDOWN SYSTEM (ANGADI DESIGN SYSTEM)
+   Replaces native browser pickers with styled warm-toned dropdown menus
+   ========================================================================== */
+.solum-dropdown-menu {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  background: #fbf9f5 !important;
+  border: 1px solid rgba(46, 58, 47, 0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 42px -8px rgba(46, 58, 47, 0.28), 0 6px 16px rgba(46, 58, 47, 0.08) !important;
+  padding: 6px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  font-family: var(--font-body, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  animation: solumDropdownIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: top center;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(46, 58, 47, 0.2) transparent !important;
+}
+
+@keyframes solumDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.solum-dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  display: block !important;
+}
+
+.solum-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(46, 58, 47, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.solum-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #2e3a2f !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+}
+
+.solum-dropdown-item:hover,
+.solum-dropdown-item.is-focused {
+  background: rgba(46, 58, 47, 0.07) !important;
+  color: #2e3a2f !important;
+}
+
+.solum-dropdown-item.is-selected {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.solum-dropdown-item .solum-check-icon {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+}
+
+.solum-dropdown-text {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.page--admin .field__hint {
+  font-size: var(--fs-xs) !important;
+  color: var(--muted) !important;
+  margin-top: 6px !important;
+  line-height: 1.4 !important;
+  display: block !important;
+  clear: both !important;
+}
+
+.page--admin .field__err {
+  font-size: var(--fs-sm) !important;
+  color: #8f3a1b !important;
+  margin-top: 4px !important;
+}
+
+/* Steppers in Stock card */
+.page--admin .steppers {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+}
+
+.page--admin .stepper {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r) !important;
+  background: var(--surface) !important;
+  gap: 8px !important;
+  padding: 12px !important;
+  display: grid !important;
+}
+
+.page--admin .stepper__size {
+  font-size: var(--fs-sm) !important;
+  font-weight: 600 !important;
+  color: var(--moss) !important;
+}
+
+.page--admin .stepper__ctl {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.page--admin .stepper__ctl input {
+  text-align: center !important;
+  font-variant-numeric: tabular-nums !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  padding: 0 4px !important;
+  line-height: 36px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  background: var(--card) !important;
+  border: 1px solid var(--line-2) !important;
+  color: var(--moss) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   CUSTOM FLOATING DROPDOWN SYSTEM (ANGADI DESIGN SYSTEM)
+   Replaces native browser pickers with styled warm-toned dropdown menus
+   ========================================================================== */
+.solum-dropdown-menu {
+  position: fixed !important;
+  z-index: 9999999 !important;
+  background: #fbf9f5 !important;
+  border: 1px solid rgba(46, 58, 47, 0.18) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 42px -8px rgba(46, 58, 47, 0.28), 0 6px 16px rgba(46, 58, 47, 0.08) !important;
+  padding: 6px !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  font-family: var(--font-body, "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  animation: solumDropdownIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transform-origin: top center;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(46, 58, 47, 0.2) transparent !important;
+}
+
+@keyframes solumDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.solum-dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  display: block !important;
+}
+
+.solum-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(46, 58, 47, 0.2) !important;
+  border-radius: 999px !important;
+}
+
+.solum-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 9px 14px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #2e3a2f !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: background-color 0.12s ease, color 0.12s ease !important;
+  box-sizing: border-box !important;
+  line-height: 1.3 !important;
+}
+
+.solum-dropdown-item:hover,
+.solum-dropdown-item.is-focused {
+  background: rgba(46, 58, 47, 0.07) !important;
+  color: #2e3a2f !important;
+}
+
+.solum-dropdown-item.is-selected {
+  background: #2e3a2f !important;
+  color: #f4efe6 !important;
+  font-weight: 600 !important;
+}
+
+.solum-dropdown-item .solum-check-icon {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+}
+
+.solum-dropdown-text {
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ==========================================================================
+   ANGADI ADMIN RESPONSIVE LAYOUT ENGINE (Tablets, Split-Screen & Mobile)
+   ========================================================================== */
+
+.page--admin .side__glyph {
+  display: none;
+}
+
+/* 1. Tablet View (768px - 1099px): Compact Sidebar Rail */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .page--admin {
+    --side-w: 72px !important;
+  }
+  .page--admin .side {
+    width: 72px !important;
+    padding: 16px 8px !important;
+  }
+  .page--admin .side__sub,
+  .page--admin .side__mark,
+  .page--admin .side__label,
+  .page--admin .side__user {
+    display: none !important;
+  }
+  .page--admin .side__link {
+    justify-content: center !important;
+    padding: 10px 0 !important;
+  }
+  .page--admin .side__glyph {
+    display: grid !important;
+    place-items: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    color: #fbf9f5 !important;
+    background: rgba(244, 239, 230, 0.12) !important;
+    border-radius: 12px !important;
+    margin: 0 auto 12px !important;
+  }
+}
+
+/* 2. Mobile View (<= 767px): Native App Bottom Navigation Bar */
+@media (max-width: 767px) {
+  .page--admin .shell {
+    display: block !important;
+  }
+  .page--admin .side {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    width: 100% !important;
+    height: 58px !important;
+    padding: 4px 8px calc(4px + env(safe-area-inset-bottom)) !important;
+    z-index: 100 !important;
+    flex-direction: row !important;
+    background: rgba(36, 48, 37, 0.96) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.2) !important;
+    border-top: 1px solid rgba(255,255,255,0.08) !important;
+  }
+  .page--admin .side__brand,
+  .page--admin .side__foot {
+    display: none !important;
+  }
+  .page--admin .side__nav {
+    width: 100% !important;
+    flex: 1 !important;
+  }
+  .page--admin .side__nav ul {
+    display: flex !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+  }
+  .page--admin .side__link {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 50px !important;
+    padding: 2px 8px !important;
+    font-size: 11px !important;
+    gap: 3px !important;
+  }
+  .page--admin .side__label {
+    font-size: 10px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .page--admin main,
+  .page--admin .main {
+    padding: 20px 14px 84px !important;
+  }
+}
+
+/* 3. Top Header Bar & Search on Tablets & Mobile */
+@media (max-width: 900px) {
+  .page--admin .top {
+    flex-wrap: wrap !important;
+    padding: 12px 14px !important;
+    gap: 10px 12px !important;
+  }
+  .page--admin .top__title {
+    font-size: 1.3rem !important;
+    min-width: 0 !important;
+  }
+  .page--admin .top__actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-left: auto !important;
+  }
+  .page--admin .top__search {
+    min-width: 140px !important;
+    flex: 1 1 140px !important;
+    max-width: 220px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .page--admin .top__search {
+    order: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+  .page--admin .top__kbd {
+    display: none !important;
+  }
+  .page--admin .kpis {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .page--admin .kpi {
+    padding: 14px 12px 12px !important;
+  }
+  .page--admin .kpi__value {
+    font-size: clamp(1.2rem, 5vw, 1.45rem) !important;
+  }
+}
+
+/* 4. Data Tables Responsive Horizontal Scrolling */
+.page--admin .tableview__scroll,
+.page--admin .tableview,
+.page--admin .card:has(table) {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+}
+
+.page--admin table {
+  min-width: 580px !important;
+}

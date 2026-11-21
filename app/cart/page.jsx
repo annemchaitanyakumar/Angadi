@@ -9,13 +9,35 @@ function CartInner() {
       document.documentElement.classList.add('rm');
     }
 
+    // Immediately fetch authoritative settings from backend and seed localStorage['angadi:settings']
+    fetch('/api/admin/settings')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.settings) {
+          localStorage.setItem('angadi:settings', JSON.stringify(data.settings));
+          window.dispatchEvent(new StorageEvent('storage', { key: 'angadi:settings' }));
+        }
+      })
+      .catch(() => {});
+
+    // Listen to live cross-tab settings updates
+    const handleSettingsUpdate = (e) => {
+      if (!e || e.key === 'angadi:settings' || e.type === 'angadi:settings-updated') {
+        window.dispatchEvent(new StorageEvent('storage', { key: 'angadi:bag2' }));
+      }
+    };
+    window.addEventListener('storage', handleSettingsUpdate);
+    window.addEventListener('angadi:settings-updated', handleSettingsUpdate);
+
     const script = document.createElement('script');
     script.type = 'module';
-    script.src = '/assets/cart-D2yeZsU3.js';
+    script.src = '/assets/cart-D2yeZsU3.js?v=2';
     document.body.appendChild(script);
 
     return () => {
       script.remove();
+      window.removeEventListener('storage', handleSettingsUpdate);
+      window.removeEventListener('angadi:settings-updated', handleSettingsUpdate);
     };
   }, []);
 

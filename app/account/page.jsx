@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, Suspense } from 'react';
+import AccountAuthSync from './AccountAuthSync';
 
 function AccountInner() {
   useEffect(() => {
@@ -21,11 +22,9 @@ function AccountInner() {
 
   return (
     <div className="page page--account">
+      <AccountAuthSync />
       
       {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
-
-
-  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
 
 <header className="topbar" data-topbar>
   <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu"><svg width="22" height="22"><use href="#i-menu"/></svg></button>
@@ -77,7 +76,6 @@ function AccountInner() {
   </div>
 </footer>
 
-  {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
     </div>
   );
 }

@@ -3,3 +3,11 @@ node_modules/
 out/
 .DS_Store
 Thumbs.db
+
+# Environment variables
+.env*.local
+.env
+
+# Local stores and scratch
+data/
+scratch/

@@ -3,6 +3,9 @@ import '@/styles/pages.css';
 import Icons from '@/components/Icons';
 import SoundProvider from '@/components/SoundProvider';
 import ScrollFix from '@/components/ScrollFix';
+import CustomDropdownProvider from '@/components/CustomDropdownProvider';
+import NavbarAuthSync from '@/components/NavbarAuthSync';
+import TabAccountManager from '@/components/TabAccountManager';
 import { StoreProvider } from '@/context/StoreContext';
 
 export const metadata = {
@@ -25,7 +28,10 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#ECE6DC'
+  themeColor: '#ECE6DC',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5
 };
 
 export default function RootLayout({ children }) {
@@ -58,6 +64,9 @@ export default function RootLayout({ children }) {
       <body>
         <SoundProvider />
         <ScrollFix />
+        <CustomDropdownProvider />
+        <NavbarAuthSync />
+        <TabAccountManager />
         <a className="skip" href="#main">Skip to content</a>
         <Icons />
 

@@ -1,9 +1,9 @@
-import { PRODUCTS } from '@/lib/data';
+import { getProduct, getProducts } from '@/lib/db';
 import ProductClient from './ProductClient';
 
-function getRelated(product) {
+function getRelated(product, allProducts = []) {
   if (!product) return [];
-  const others = PRODUCTS.filter(p => p.id !== product.id);
+  const others = allProducts.filter(p => p.id !== product.id);
   const score = t => (t.category === product.category ? 2 : 0) + (t.terrain === product.terrain ? 1 : 0) + (t.gender === product.gender ? 0.5 : 0);
   return others.sort((a, b) => score(b) - score(a) || b.rating - a.rating).slice(0, 4);
 }
@@ -11,8 +11,11 @@ function getRelated(product) {
 export default async function ProductPage({ searchParams }) {
   const resolved = await searchParams;
   const id = resolved?.id || 'ridgeline';
-  const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0];
-  const related = getRelated(product);
+  const [product, allProducts] = await Promise.all([
+    getProduct(id),
+    getProducts()
+  ]);
+  const related = getRelated(product, allProducts);
   const stockKeys = Object.keys(product.stock);
   const totalStock = Object.values(product.stock).reduce((a, b) => a + b, 0);
   const isSoldOut = totalStock === 0;

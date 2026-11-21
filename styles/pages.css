@@ -113,3 +113,121 @@ main,
 .co {
   overflow-y: visible !important;
 }
+
+/* ==========================================================================
+   ANGADI RESPONSIVE SYSTEM: CART, CHECKOUT & STOREFRONT
+   ========================================================================== */
+
+/* 1. Responsive Grids for Cart & Checkout */
+@media (max-width: 960px) {
+  .cart__grid,
+  .co,
+  .order-responsive-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .summary {
+    position: static !important;
+    top: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 2. Responsive Cart Line Items */
+@media (max-width: 640px) {
+  .line {
+    grid-template-columns: 84px 1fr !important;
+    gap: 14px !important;
+    padding: 16px 0 !important;
+  }
+
+  .line__img {
+    width: 84px !important;
+  }
+
+  .line__price {
+    grid-column: 2 / -1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-top: 6px !important;
+  }
+
+  .summary {
+    padding: 20px 18px !important;
+    border-radius: 18px !important;
+  }
+
+  .summary h2 {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* 3. Responsive Form Rows in Checkout */
+@media (max-width: 640px) {
+  .row2,
+  .row3 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .step__head {
+    padding: 16px 14px !important;
+  }
+
+  .step__body {
+    padding: 0 14px 18px !important;
+  }
+
+  .step__title {
+    font-size: 1.25rem !important;
+  }
+
+  .checkout-methods-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .order-step-tracker {
+    gap: 4px !important;
+  }
+
+  .order-step-tracker .tracker-step-desc {
+    display: none !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .checkout-methods-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 4. Responsive Order Tracking Page */
+.order-responsive-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .order-responsive-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .order-card {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+  }
+  
+  .order-header-wrap {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+}
+
