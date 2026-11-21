@@ -92,6 +92,9 @@ export default async function ProductPage({ searchParams }) {
                   </>
                 )}
               </div>
+              <button className="iconbtn pd__heart-mobile" type="button" data-save={product.id} aria-pressed="false" aria-label={`Save ${product.name}`}>
+                <svg width="22" height="22"><use href="#i-heart" /></svg>
+              </button>
               {product.gallery.length > 1 && (
                 <div className="pd__thumbs">
                   {product.gallery.map((src, idx) => (
@@ -111,13 +114,53 @@ export default async function ProductPage({ searchParams }) {
             </div>
 
             <div className="pd__info">
-              <p className="eyebrow">{product.category} · {product.gender}</p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
+                <p className="eyebrow" style={{ margin: 0 }}>{product.category} · {product.gender}</p>
+                {product.isFlashSale && (
+                  <span className="tag tag--flash" style={{
+                    background: '#b5562f',
+                    color: '#fff8f0',
+                    fontWeight: 700,
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    padding: '4px 12px',
+                    borderRadius: '999px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    boxShadow: '0 2px 8px rgba(181, 86, 47, 0.25)'
+                  }}>
+                    ⚡ Flash Sale · {product.discountPct}% OFF
+                  </span>
+                )}
+              </div>
               <h1 className="pd__title" data-pd-title>{product.name}</h1>
               <p className="pd__rating">
                 <span className="stars" style={{ '--r': starsRatio }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: `${starIcons}<span class="stars__fill">${starIcons}</span>` }}></span>
                 <span>{product.rating.toFixed(1)} · {product.reviews} reviews</span>
               </p>
-              <p className="pd__price"><span>₹{product.price.toFixed(2)}</span></p>
+              <p className="pd__price">
+                <span>₹{product.price.toFixed(2)}</span>
+                {product.compareAtPrice && product.compareAtPrice > product.price && (
+                  <s style={{ color: '#8c827a', fontSize: '0.85em', marginLeft: '10px', textDecoration: 'line-through' }} aria-label={`was ₹${product.compareAtPrice.toFixed(2)}`}>
+                    ₹{product.compareAtPrice.toFixed(2)}
+                  </s>
+                )}
+                {product.isFlashSale && (
+                  <span style={{
+                    marginLeft: '10px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    color: '#b5562f',
+                    background: '#f8ebe4',
+                    padding: '3px 8px',
+                    borderRadius: '6px'
+                  }}>
+                    Save {product.discountPct}%
+                  </span>
+                )}
+              </p>
               <p className="pd__blurb">{product.blurb}</p>
               <p className="pd__color">
                 Colour <strong>{product.color.name}</strong>
@@ -149,6 +192,17 @@ export default async function ProductPage({ searchParams }) {
                 <button className="pill pill--ink pd__add" type="button" data-pd-add disabled={isSoldOut}>
                   <span className="label-add">{isSoldOut ? 'Sold out' : <>Butta lo Vey · <span data-line-price>₹{product.price.toFixed(2)}</span></>}</span>
                   <span className="label-done"><svg width="18" height="18" aria-hidden="true"><use href="#i-check" /></svg>Added to bag</span>
+                  <div className="pd__stepper-mobile" data-stepper-mobile>
+                    <span className="btn-step btn-step--dec" data-q-mobile="-1" role="button" aria-label="One fewer">
+                      <svg width="16" height="16"><use href="#i-minus" /></svg>
+                    </span>
+                    <span className="btn-step__txt">
+                      <output data-qty-mobile>1</output> in bag
+                    </span>
+                    <span className="btn-step btn-step--inc" data-q-mobile="1" role="button" aria-label="One more">
+                      <svg width="16" height="16"><use href="#i-plus" /></svg>
+                    </span>
+                  </div>
                 </button>
                 <button className="iconbtn" type="button" data-save={product.id} aria-pressed="false" aria-label={`Save ${product.name}`}>
                   <svg width="22" height="22"><use href="#i-heart" /></svg>
@@ -174,7 +228,12 @@ export default async function ProductPage({ searchParams }) {
           <div className="buybar" data-buybar aria-hidden="true">
             <div className="buybar__txt">
               <p className="buybar__name">{product.name}</p>
-              <p className="buybar__price">₹{product.price.toFixed(2)}</p>
+              <p className="buybar__price">
+                ₹{product.price.toFixed(2)}
+                {product.compareAtPrice && product.compareAtPrice > product.price && (
+                  <s style={{ color: '#8c827a', fontSize: '0.8em', marginLeft: '6px' }}>₹{product.compareAtPrice.toFixed(2)}</s>
+                )}
+              </p>
             </div>
             <button className="pill pill--ink" type="button" data-pd-add tabIndex={-1} disabled={isSoldOut}>
               {isSoldOut ? 'Sold out' : 'Butta lo Vey'}
@@ -192,6 +251,13 @@ export default async function ProductPage({ searchParams }) {
                     <img className="prod__img" src={item.img} alt={item.alt} width="800" height="1067" loading="lazy" />
                     {item.gallery[1] && <img className="prod__img prod__img--alt" src={item.gallery[1]} alt="" width="800" height="1067" loading="lazy" />}
                   </a>
+                  {item.isFlashSale && (
+                    <div className="prod__tags" style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 3 }}>
+                      <span className="tag tag--flash" style={{ background: '#b5562f', color: '#fff8f0', fontWeight: 700, fontSize: '11px', padding: '3px 10px', borderRadius: '999px' }}>
+                        ⚡ Flash -{item.discountPct}%
+                      </span>
+                    </div>
+                  )}
                   <button className="prod__heart" type="button" data-save={item.id} aria-pressed="false" aria-label={`Save ${item.name}`}>
                     <svg width="20" height="20"><use href="#i-heart" /></svg>
                   </button>
@@ -203,7 +269,12 @@ export default async function ProductPage({ searchParams }) {
                 <div className="prod__body">
                   <h3 className="prod__name"><a href={`/product?id=${encodeURIComponent(item.id)}`}>{item.name}</a></h3>
                   <p className="prod__meta">{item.category} · {item.gender}</p>
-                  <p className="prod__price">₹{item.price.toFixed(2)}</p>
+                  <p className="prod__price">
+                    <span>₹{item.price.toFixed(2)}</span>
+                    {item.compareAtPrice && item.compareAtPrice > item.price && (
+                      <s style={{ color: '#8c827a', fontSize: '0.85em', marginLeft: '6px' }}>₹{item.compareAtPrice.toFixed(2)}</s>
+                    )}
+                  </p>
                 </div>
               </li>
             ))}

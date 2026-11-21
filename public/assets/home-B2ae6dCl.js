@@ -4,12 +4,12 @@ import{H as e,P as t,V as n,b as r,h as i,i as a,z as o}from"./store-DfXjkpw_.js
       <figure data-blinds><img src="${e.img}" width="960" height="1280" alt="${v(e.alt)}" loading="lazy" /></figure>
     </a>
     <div class="gcard__top">
-      <span class="gcard__tag">${e.terrain}</span>
+      ${(e.isFlashSale||e.flashSale?.active)?`<span class="gcard__tag tag--flash" style="background:#b5562f;color:#fff8f0;font-weight:700;">⚡ Flash -${e.discountPct||e.flashSale?.discountPct}%</span>`:`<span class="gcard__tag">${e.terrain}</span>`}
       <button class="gcard__heart" type="button" aria-pressed="false" data-save="${v(e.id)}" aria-label="Save ${v(e.name)}"><svg width="16" height="16"><use href="#i-heart"/></svg></button>
     </div>
     <div class="gcard__bar">
       <p class="gcard__name">${v(e.name)}</p>
-      <p class="gcard__price">${o(e.price)}</p>
+      <p class="gcard__price">${o(e.price)}${e.compareAt&&e.compareAt>e.price?` <s style="font-size:0.75em;opacity:0.7;margin-left:4px;">${o(e.compareAt)}</s>`:``}</p>
       <button class="gcard__add" type="button" data-add="${v(e.id)}" aria-label="Quick add ${v(e.name)}"><svg width="18" height="18"><use href="#i-plus"/></svg></button>
     </div>
   </li>`).join(``),g(A)}j(),i(e=>{e===`products`&&(j(),V(B,!1))});var M=S(`.look`),N=S(`[data-look]`),P=e=>`Look ni Butta lo Vey · ${o(t[e].price)}`;function F(){M.classList.remove(`is-static`);let e=t[0];N.innerHTML=`

@@ -1818,3 +1818,12 @@ select option:checked {
 .page--admin table {
   min-width: 580px !important;
 }
+
+/* Flash sale tag styling */
+.tag--flash {
+  background: var(--c-clay, #b5562f) !important;
+  color: #fff8f0 !important;
+  font-weight: 700 !important;
+  letter-spacing: .06em !important;
+  box-shadow: 0 2px 6px rgba(181, 86, 47, .3) !important;
+}

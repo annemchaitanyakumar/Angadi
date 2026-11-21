@@ -16,31 +16,39 @@ if (typeof window !== 'undefined' && !window.__tab_account_initialized) {
     }
   } catch {}
 
-  const originalGetItem = Storage.prototype.getItem;
-  const originalSetItem = Storage.prototype.setItem;
+  try {
+    const originalGetItem = Storage.prototype.getItem;
+    const originalSetItem = Storage.prototype.setItem;
 
-  Storage.prototype.getItem = function (key) {
-    if (this === localStorage && key === 'angadi:account') {
+    Storage.prototype.getItem = function (key) {
       try {
-        if (sessionStorage.getItem('angadi:tab_mode') === 'guest') {
-          return null;
+        if (this === window.localStorage && key === 'angadi:account') {
+          if (window.sessionStorage.getItem('angadi:tab_mode') === 'guest') {
+            return null;
+          }
+          const tabVal = window.sessionStorage.getItem('angadi:account');
+          if (tabVal !== null) return tabVal;
         }
-        const tabVal = sessionStorage.getItem('angadi:account');
-        if (tabVal !== null) return tabVal;
       } catch {}
-    }
-    return originalGetItem.apply(this, arguments);
-  };
-
-  Storage.prototype.setItem = function (key, val) {
-    if (this === localStorage && key === 'angadi:account') {
       try {
-        sessionStorage.setItem('angadi:account', val);
-        sessionStorage.removeItem('angadi:tab_mode');
+        return originalGetItem.call(this, key);
+      } catch {
+        return null;
+      }
+    };
+
+    Storage.prototype.setItem = function (key, val) {
+      try {
+        if (this === window.localStorage && key === 'angadi:account') {
+          window.sessionStorage.setItem('angadi:account', val);
+          window.sessionStorage.removeItem('angadi:tab_mode');
+        }
       } catch {}
-    }
-    return originalSetItem.apply(this, arguments);
-  };
+      try {
+        return originalSetItem.call(this, key, val);
+      } catch {}
+    };
+  } catch {}
 }
 
 export default function TabAccountManager() {

@@ -15,6 +15,7 @@ import{A as e,C as t,H as n,b as r,h as i,y as a,z as o}from"./store-DfXjkpw_.js
           <button class="iconbtn pd__arrow pd__arrow--next" type="button" data-step="1" aria-label="Next photo"><svg width="20" height="20"><use href="#i-arrow"/></svg></button>
           <p class="pd__count" aria-live="polite" data-count>1 / ${n.gallery.length}</p>`:``}
         </div>
+        <button class="iconbtn pd__heart-mobile" type="button" data-save="${h(n.id)}" aria-pressed="${i}" aria-label="Save ${h(n.name)}"><svg width="22" height="22"><use href="#i-heart"/></svg></button>
         ${n.gallery.length>1?`<div class="pd__thumbs">${n.gallery.map((e,t)=>`<button class="pd__thumb" type="button" data-thumb="${t}" aria-current="${t===0}" aria-label="Show photo ${t+1} of ${n.gallery.length}"><img src="${e}" width="160" height="213" alt="" loading="lazy" /></button>`).join(``)}</div>`:``}
       </div>
 
@@ -43,6 +44,11 @@ import{A as e,C as t,H as n,b as r,h as i,y as a,z as o}from"./store-DfXjkpw_.js
           <button class="pill pill--ink pd__add" type="button" data-pd-add ${e(n)===0?`disabled`:``}>
             <span class="label-add">${e(n)===0?`Sold out`:`Butta lo Vey · <span data-line-price>${o(n.price*O)}</span>`}</span>
             <span class="label-done"><svg width="18" height="18" aria-hidden="true"><use href="#i-check"/></svg>Added to bag</span>
+            <div class="pd__stepper-mobile" data-stepper-mobile>
+              <span class="btn-step btn-step--dec" data-q-mobile="-1" role="button" aria-label="One fewer"><svg width="16" height="16"><use href="#i-minus"/></svg></span>
+              <span class="btn-step__txt"><output data-qty-mobile>${O}</output> in bag</span>
+              <span class="btn-step btn-step--inc" data-q-mobile="1" role="button" aria-label="One more"><svg width="16" height="16"><use href="#i-plus"/></svg></span>
+            </div>
           </button>
           <button class="iconbtn" type="button" data-save="${h(n.id)}" aria-pressed="${i}" aria-label="Save ${h(n.name)}"><svg width="22" height="22"><use href="#i-heart"/></svg></button>
         </div>

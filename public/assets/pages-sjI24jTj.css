@@ -113,3 +113,142 @@ main,
 .co {
   overflow-y: visible !important;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE-ONLY PRODUCT DETAIL PAGE ENHANCEMENTS
+   - Wishlist Heart on Product Image
+   - In-Button Quantity Stepper inside "Butta lo Vey"
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Hidden by default on Desktop */
+.pd__heart-mobile {
+  display: none !important;
+}
+
+.pd__stepper-mobile {
+  display: none !important;
+}
+
+@media (max-width: 1000px) {
+  /* 1. Position wishlist heart floating on top of product image */
+  .pd__gallery {
+    position: relative !important;
+  }
+
+  .pd__stage {
+    position: relative !important;
+  }
+
+  .pd__heart-mobile {
+    display: inline-grid !important;
+    position: absolute !important;
+    top: 14px !important;
+    right: calc(var(--gut, 16px) + 12px) !important;
+    z-index: 20 !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    background: rgba(244, 239, 230, 0.92) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(46, 58, 47, 0.12) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+    color: var(--c-moss) !important;
+    place-items: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+  }
+
+  .pd__heart-mobile svg {
+    fill: none;
+    transition: fill 0.2s, transform 0.2s;
+  }
+
+  .pd__heart-mobile[aria-pressed="true"] {
+    color: var(--c-clay, #b5562f) !important;
+  }
+
+  .pd__heart-mobile[aria-pressed="true"] svg {
+    fill: var(--c-clay, #b5562f) !important;
+  }
+
+  /* 2. Hide desktop wishlist heart and separate quantity stepper in .pd__buy on mobile */
+  .pd__buy > .iconbtn[data-save] {
+    display: none !important;
+  }
+
+  .pd__buy .qty {
+    display: none !important;
+  }
+
+  .pd__buy {
+    grid-template-columns: 1fr !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .pd__buy .pd__add {
+    width: 100% !important;
+    height: 56px !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  /* 3. In-button Stepper inside "Butta lo Vey" when active */
+  .pd__add.has-stepper {
+    background: var(--c-moss) !important;
+    padding: 0 8px !important;
+  }
+
+  .pd__add.has-stepper .label-add,
+  .pd__add.has-stepper .label-done {
+    display: none !important;
+  }
+
+  .pd__add.has-stepper .pd__stepper-mobile {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 4px !important;
+    user-select: none !important;
+  }
+
+  .pd__stepper-mobile .btn-step {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    background: rgba(244, 239, 230, 0.18) !important;
+    color: #fff8f0 !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s, transform 0.15s !important;
+    flex-shrink: 0 !important;
+  }
+
+  .pd__stepper-mobile .btn-step:hover,
+  .pd__stepper-mobile .btn-step:active {
+    background: var(--c-clay, #b5562f) !important;
+    transform: scale(0.92) !important;
+  }
+
+  .pd__stepper-mobile .btn-step__txt {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    color: #fff8f0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  .pd__stepper-mobile [data-qty-mobile] {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    min-width: 16px !important;
+    text-align: center !important;
+  }
+}
+
