@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { createClient } from '@/lib/supabase/server';
-import { getLocalAccounts } from '@/lib/auth';
-
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-const ACCOUNTS_FILE = path.resolve(DATA_DIR, 'accounts.json');
+import { getLocalAccounts, updateLocalAccount, deleteLocalAccount } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -134,20 +129,7 @@ export async function PUT(request) {
     }
 
     // 2. Update in local accounts if present
-    if (fs.existsSync(ACCOUNTS_FILE)) {
-      try {
-        const raw = fs.readFileSync(ACCOUNTS_FILE, 'utf8');
-        const accounts = JSON.parse(raw);
-        const target = accounts.find(a => a.email.toLowerCase() === normalizedEmail);
-        if (target) {
-          if (name) target.name = name;
-          target.updatedAt = new Date().toISOString();
-          fs.writeFileSync(ACCOUNTS_FILE, JSON.stringify(accounts, null, 2), 'utf8');
-        }
-      } catch (err) {
-        console.warn('Local account update warning:', err);
-      }
-    }
+    updateLocalAccount(normalizedEmail, { name });
 
     // 3. Update orders guest name for consistency
     if (supabase && name) {
@@ -192,16 +174,7 @@ export async function DELETE(request) {
     }
 
     // 2. Delete from local accounts
-    if (fs.existsSync(ACCOUNTS_FILE)) {
-      try {
-        const raw = fs.readFileSync(ACCOUNTS_FILE, 'utf8');
-        let accounts = JSON.parse(raw);
-        accounts = accounts.filter(a => a.email.toLowerCase() !== normalizedEmail);
-        fs.writeFileSync(ACCOUNTS_FILE, JSON.stringify(accounts, null, 2), 'utf8');
-      } catch (err) {
-        console.warn('Local account delete warning:', err);
-      }
-    }
+    deleteLocalAccount(normalizedEmail);
 
     return NextResponse.json({
       success: true,

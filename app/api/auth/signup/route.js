@@ -18,12 +18,8 @@ export async function POST(request) {
     const normalizedEmail = email.toLowerCase().trim();
     const fullName = (name || '').trim() || normalizedEmail.split('@')[0];
 
-    // Check if account already exists locally
-    const existingLocal = findLocalAccount(normalizedEmail);
-
     const supabase = await createClient();
     let supabaseUser = null;
-    let rateLimited = false;
 
     if (supabase) {
       try {
@@ -40,10 +36,7 @@ export async function POST(request) {
 
         if (error) {
           const errMsg = error.message.toLowerCase();
-          if (errMsg.includes('rate limit') || errMsg.includes('over_email_send_rate_limit')) {
-            console.warn('Supabase email rate limit reached; using resilient fallback account store.');
-            rateLimited = true;
-          } else if (errMsg.includes('already registered')) {
+          if (errMsg.includes('already registered')) {
             return NextResponse.json({
               success: false,
               error: 'An account with this email already exists. Please sign in.'
@@ -69,24 +62,39 @@ export async function POST(request) {
       }
     }
 
-    // Always persist to local encrypted account store as safety net
-    const localRecord = saveLocalAccount({
-      email: normalizedEmail,
-      name: fullName,
-      password
-    });
+    // Always persist to resilient local account store as fallback safety net
+    let localRecord = null;
+    try {
+      localRecord = saveLocalAccount({
+        email: normalizedEmail,
+        name: fullName,
+        password
+      });
+    } catch (saveErr) {
+      console.warn('Local account save warning:', saveErr);
+    }
+
+    if (!supabaseUser && !localRecord) {
+      return NextResponse.json({
+        success: false,
+        error: 'Unable to register account. Please try again.'
+      }, { status: 500 });
+    }
 
     return NextResponse.json({
       success: true,
       message: 'Account created successfully',
       user: {
-        id: supabaseUser?.id || localRecord.id,
+        id: supabaseUser?.id || localRecord?.id || 'usr_' + Date.now(),
         email: normalizedEmail,
         name: fullName
       }
     });
   } catch (err) {
     console.error('Signup error:', err);
-    return NextResponse.json({ success: false, error: err.message || 'Server error' }, { status: 500 });
+    return NextResponse.json({
+      success: false,
+      error: 'Account creation encountered an issue. Please try again.'
+    }, { status: 500 });
   }
 }
