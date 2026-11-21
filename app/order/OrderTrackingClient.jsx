@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { PRODUCTS, LOOKS } from '@/lib/data';
 
 const STEPS = [
   { id: 'Pending', label: 'Order placed', desc: 'We have received your order' },
@@ -62,14 +63,19 @@ export default function OrderTrackingClient() {
               email: dbO.guest_email || ''
             },
             address: dbO.shipping_address || {},
-            lines: (dbO.order_items || []).map(i => ({
-              id: i.product_id,
-              name: i.product_name,
-              size: i.size,
-              qty: i.qty,
-              price: Number(i.price),
-              img: i.image_url || '/photos/158-solum/trail-main.jpg'
-            })),
+            lines: (dbO.order_items || []).map(i => {
+              const pId = String(i.product_id || '').toLowerCase();
+              const pName = String(i.product_name || '').toLowerCase();
+              const matched = PRODUCTS.find(p => p.id.toLowerCase() === pId || p.name.toLowerCase() === pName || (pId && p.id.toLowerCase().includes(pId)));
+              return {
+                id: i.product_id,
+                name: i.product_name,
+                size: i.size,
+                qty: i.qty,
+                price: Number(i.price),
+                img: matched ? matched.img : (i.image_url || '/photos/158-solum/pick-2.jpg')
+              };
+            }),
             subtotal: Number(dbO.subtotal || 0),
             discount: dbO.discount ? Number(dbO.discount) : 0,
             shipping: Number(dbO.shipping || 0),
@@ -401,7 +407,15 @@ export default function OrderTrackingClient() {
             {(order.lines || []).map((item, idx) => (
               <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid #f4f0e9', paddingBottom: '14px' }}>
                 <div style={{ position: 'relative', width: '64px', height: '80px', borderRadius: '10px', overflow: 'hidden', background: '#f4f0e9', flexShrink: 0 }}>
-                  <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/photos/158-solum/pick-2.jpg';
+                    }}
+                  />
                   <span
                     style={{
                       position: 'absolute',

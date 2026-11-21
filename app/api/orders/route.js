@@ -1,5 +1,36 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { PRODUCTS, LOOKS } from '@/lib/data';
+
+function resolveItemImage(item) {
+  const pId = String(item.product_id || item.id || '').toLowerCase().trim();
+  const pName = String(item.product_name || item.name || '').toLowerCase().trim();
+
+  // 1. Match in catalog PRODUCTS
+  const product = PRODUCTS.find(p =>
+    p.id.toLowerCase() === pId ||
+    p.name.toLowerCase() === pName ||
+    (pId && p.id.toLowerCase().includes(pId)) ||
+    (pName && p.name.toLowerCase().includes(pName)) ||
+    (pName && pName.includes(p.name.toLowerCase()))
+  );
+  if (product && product.img) return product.img;
+
+  // 2. Match in catalog LOOKS
+  const look = LOOKS.find(l =>
+    l.id.toLowerCase() === pId ||
+    l.title.toLowerCase().includes(pName) ||
+    pName.includes(l.id.toLowerCase())
+  );
+  if (look && look.img) return look.img;
+
+  // 3. Fallback to provided URL if not pointing to non-existent file
+  if (item.image_url && typeof item.image_url === 'string' && item.image_url.trim()) {
+    return item.image_url;
+  }
+
+  return '/photos/158-solum/pick-2.jpg';
+}
 
 export async function GET(request) {
   const supabase = await createClient();
@@ -58,7 +89,7 @@ export async function GET(request) {
         size: item.size,
         qty: item.qty,
         price: Number(item.price),
-        img: item.image_url || '/photos/158-solum/trail-main.jpg'
+        img: resolveItemImage(item)
       })),
       subtotal: Number(order.subtotal || 0),
       shipping: Number(order.shipping || 0),

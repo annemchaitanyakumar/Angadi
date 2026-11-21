@@ -32,15 +32,21 @@ export async function POST(request) {
       if (item.kind === 'look') {
         const look = LOOKS.find(l => l.id === item.id);
         authoritativePrice = look ? look.price : 200;
-        if (look) name = `Look ${look.id.slice(-1).padStart(2, '0')} · ${look.title.replace(/\n/g, ' ')}`;
+        if (look) {
+          name = `Look ${look.id.slice(-1).padStart(2, '0')} · ${look.title.replace(/\n/g, ' ')}`;
+          img = look.img;
+        }
       } else {
-        const localP = PRODUCTS.find(p => p.id === item.id);
+        const localP = PRODUCTS.find(p => p.id === item.id || p.name.toLowerCase() === (item.name || '').toLowerCase());
         const basePrice = localP ? localP.price : (Number(item.price) || 120);
         
         // Factor in flash sale discounts
         const discounted = getDiscountedProductPrice(item.id, basePrice);
         authoritativePrice = discounted.price;
-        if (localP) name = localP.name;
+        if (localP) {
+          name = localP.name;
+          img = localP.img;
+        }
       }
 
       const qty = Math.max(1, Number(item.qty || 1));

@@ -3,6 +3,36 @@
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import AdminSettingsDrawer from '@/components/AdminSettingsDrawer';
+import { PRODUCTS, LOOKS } from '@/lib/data';
+
+function resolveOrderLineImage(i) {
+  const pId = String(i.id || i.product_id || '').toLowerCase().trim();
+  const pName = String(i.name || i.product_name || '').toLowerCase().trim();
+
+  // 1. Direct match in PRODUCTS
+  const product = PRODUCTS.find(p =>
+    p.id.toLowerCase() === pId ||
+    p.name.toLowerCase() === pName ||
+    (pId && p.id.toLowerCase().includes(pId)) ||
+    (pName && p.name.toLowerCase().includes(pName)) ||
+    (pName && pName.includes(p.name.toLowerCase()))
+  );
+  if (product && product.img) return product.img;
+
+  // 2. Direct match in LOOKS
+  const look = LOOKS.find(l =>
+    l.id.toLowerCase() === pId ||
+    l.title.toLowerCase().includes(pName) ||
+    pName.includes(l.id.toLowerCase())
+  );
+  if (look && look.img) return look.img;
+
+  // 3. Fallback to provided img or image_url if valid
+  if (i.img && typeof i.img === 'string' && i.img.trim()) return i.img;
+  if (i.image_url && typeof i.image_url === 'string' && i.image_url.trim()) return i.image_url;
+
+  return '/photos/158-solum/pick-2.jpg';
+}
 
 function mapDbStatusToStore(status) {
   const s = String(status || '').toLowerCase();
@@ -27,7 +57,7 @@ function sanitizeOrder(o) {
     size: i.size || 'M',
     qty: Number(i.qty) || 1,
     price: Number(i.price) || 0,
-    img: i.img || i.image_url || '/photos/158-solum/pick-2.jpg'
+    img: resolveOrderLineImage(i)
   }));
 
   const addr = o.address || o.shipping_address || {};
@@ -266,9 +296,32 @@ export default function AdminRealtimeSync() {
 
     document.addEventListener('click', handleDocumentClick);
 
+    // Global image error handler for any broken/missing product thumbnail in admin
+    function handleImageError(e) {
+      if (e.target && e.target.tagName === 'IMG') {
+        const imgEl = e.target;
+        const currentSrc = imgEl.getAttribute('src') || '';
+        if (currentSrc.includes('pick-2.jpg')) return; // Avoid infinite loops
+
+        // Try to identify product from surrounding list items or drawer text
+        const parent = imgEl.closest('li, tr, .dr__line, .tp, .low, .pcard');
+        const text = parent ? (parent.textContent || '').toLowerCase() : '';
+
+        const matched = PRODUCTS.find(p => text.includes(p.name.toLowerCase()) || text.includes(p.id.toLowerCase()));
+        if (matched && matched.img) {
+          imgEl.src = matched.img;
+        } else {
+          imgEl.src = '/photos/158-solum/pick-2.jpg';
+        }
+      }
+    }
+
+    window.addEventListener('error', handleImageError, true);
+
     return () => {
       supabase.removeChannel(channel);
       document.removeEventListener('click', handleDocumentClick);
+      window.removeEventListener('error', handleImageError, true);
     };
   }, []);
 
