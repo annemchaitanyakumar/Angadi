@@ -187,6 +187,8 @@ export default function ProductClient({ productId }) {
     };
 
     syncInitialMobileStepper();
+    setTimeout(syncInitialMobileStepper, 120);
+    setTimeout(syncInitialMobileStepper, 400);
     document.addEventListener('click', handleMobileStepper, true);
     document.addEventListener('change', handleMobileSizeChange, true);
     window.addEventListener('storage', syncInitialMobileStepper);

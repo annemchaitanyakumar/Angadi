@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Common Indian PIN code directory for instant auto-fill
@@ -22,10 +22,34 @@ const PIN_CODE_DIRECTORY = {
 export default function CheckoutFlow() {
   const router = useRouter();
 
+  // Accordion Step Section Refs for automatic viewport centering
+  const stepContactRef = useRef(null);
+  const stepDeliveryRef = useRef(null);
+  const stepPaymentRef = useRef(null);
+
   // State
   const [bag, setBag] = useState([]);
   const [mounted, setMounted] = useState(false);
   const [currentStep, setCurrentStep] = useState('contact'); // 'contact' | 'delivery' | 'payment'
+
+  // Centered step navigation with smooth viewport scroll
+  const goToStep = useCallback((targetStep) => {
+    setCurrentStep(targetStep);
+    if (typeof window !== 'undefined') {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          let el = null;
+          if (targetStep === 'contact') el = stepContactRef.current;
+          else if (targetStep === 'delivery') el = stepDeliveryRef.current;
+          else if (targetStep === 'payment') el = stepPaymentRef.current;
+
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 60);
+      });
+    }
+  }, []);
 
   // Server-Quoted Financial Figures (Single Source of Truth from Backend)
   const [quote, setQuote] = useState({
@@ -42,8 +66,7 @@ export default function CheckoutFlow() {
   
   // Contact & Address
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [line1, setLine1] = useState('');
   const [line2, setLine2] = useState('');
@@ -58,10 +81,9 @@ export default function CheckoutFlow() {
 
   // Payment State
   const [paymentType, setPaymentType] = useState('upi'); // 'upi' | 'card' | 'netbanking' | 'cod'
-  const [upiMode, setUpiMode] = useState('qr'); // 'qr' | 'id'
-  const [upiId, setUpiId] = useState('');
-  const [upiUtr, setUpiUtr] = useState('');
-  const [upiApproved, setUpiApproved] = useState(false);
+  const [upiStatus, setUpiStatus] = useState('waiting'); // 'waiting' | 'verifying' | 'paid'
+  const [upiSessionId] = useState(() => 'UPI-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000));
+  const [upiTxnId, setUpiTxnId] = useState('');
   const [cardName, setCardName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
   const [cardExp, setCardExp] = useState('');
@@ -141,10 +163,8 @@ export default function CheckoutFlow() {
         const acct = JSON.parse(rawAccount);
         if (acct.email) setEmail(acct.email);
         if (acct.name) {
-          const parts = acct.name.trim().split(' ');
-          setFirstName(parts[0] || '');
-          setLastName(parts.slice(1).join(' ') || '');
-          setCardName(acct.name);
+          setFullName(acct.name.trim());
+          setCardName(acct.name.trim());
         }
       }
 
@@ -167,6 +187,57 @@ export default function CheckoutFlow() {
       fetchBackendQuote(initialBag, initialPromo, 'standard');
     }
   }, [fetchBackendQuote]);
+
+  // Automated UPI Payment Tracking & Auto-Order Placement
+  useEffect(() => {
+    if (currentStep !== 'payment' || paymentType !== 'upi' || isSubmitting) return;
+
+    let isCancelled = false;
+    let pollTimer = null;
+
+    async function checkPaymentStatus(triggerVerify = false) {
+      if (isCancelled || isSubmitting) return;
+      try {
+        const query = `/api/checkout/payment-status?id=${encodeURIComponent(upiSessionId)}&amount=${quote.total}${triggerVerify ? '&verify=true' : ''}`;
+        const res = await fetch(query);
+        const data = await res.json();
+
+        if (data.success && data.status === 'paid' && !isCancelled) {
+          setUpiStatus('paid');
+          const txn = data.transactionId || `UPI_${Date.now()}`;
+          setUpiTxnId(txn);
+          handlePlaceOrder(txn);
+        }
+      } catch (e) {
+        // Safe polling ignore
+      }
+    }
+
+    // Immediate check
+    checkPaymentStatus(false);
+
+    // Poll every 3 seconds while on the QR screen
+    pollTimer = setInterval(() => {
+      checkPaymentStatus(false);
+    }, 3000);
+
+    // If customer switches back to this browser tab (e.g. from PhonePe, GPay, Paytm)
+    function handleVisibilityOrFocus() {
+      if (document.visibilityState === 'visible') {
+        checkPaymentStatus(true);
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityOrFocus);
+    window.addEventListener('focus', handleVisibilityOrFocus);
+
+    return () => {
+      isCancelled = true;
+      if (pollTimer) clearInterval(pollTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityOrFocus);
+      window.removeEventListener('focus', handleVisibilityOrFocus);
+    };
+  }, [currentStep, paymentType, isSubmitting, upiSessionId, quote.total]);
 
   // Recalculate quote when delivery speed changes
   function handleDeliveryMethodChange(speed) {
@@ -235,8 +306,7 @@ export default function CheckoutFlow() {
   function validateContact() {
     const errs = {};
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Enter a valid email address.';
-    if (!firstName.trim()) errs.first = 'First name is required.';
-    if (!lastName.trim()) errs.last = 'Last name is required.';
+    if (!fullName.trim()) errs.fullName = 'Full name is required.';
     if (!line1.trim()) errs.line1 = 'Street address is required.';
     if (!city.trim()) errs.city = 'City is required.';
     if (!region.trim()) errs.region = 'State / province is required.';
@@ -254,17 +324,16 @@ export default function CheckoutFlow() {
       if (rawCard.length < 15) errs.card = 'Enter a valid card number.';
       if (!cardExp.includes('/') || cardExp.length < 7) errs.exp = 'Enter MM / YY.';
       if (cardCvc.length < 3) errs.cvc = 'Enter 3-digit CVV.';
-    } else if (paymentType === 'upi' && upiMode === 'id') {
-      if (!upiId.includes('@')) errs.upiId = 'Enter a valid UPI ID (e.g. user@okhdfcbank).';
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
 
   // Order Placement
-  async function handlePlaceOrder() {
+  async function handlePlaceOrder(externalTxnId) {
+    if (isSubmitting) return;
     setIsSubmitting(true);
-    setSubmitStatus('Authorizing payment with bank...');
+    setSubmitStatus(paymentType === 'upi' ? 'Payment confirmed! Securing order...' : 'Authorizing payment with bank...');
 
     try {
       await new Promise(r => setTimeout(r, 600));
@@ -275,7 +344,7 @@ export default function CheckoutFlow() {
 
       let paymentMethodDisplay = 'UPI';
       if (paymentType === 'upi') {
-        paymentMethodDisplay = upiUtr ? `UPI (UTR: ${upiUtr})` : `UPI (${upiMode === 'qr' ? 'QR Code' : upiId})`;
+        paymentMethodDisplay = 'UPI (Direct Real UPI)';
       } else if (paymentType === 'cod') {
         paymentMethodDisplay = 'Cash on Delivery (COD)';
       } else if (paymentType === 'netbanking') {
@@ -287,7 +356,7 @@ export default function CheckoutFlow() {
       const orderPayload = {
         orderId: generatedOrderId,
         customer: {
-          name: `${firstName} ${lastName}`.trim(),
+          name: fullName.trim() || 'Customer',
           email: email.trim().toLowerCase(),
           phone: phone.trim()
         },
@@ -310,7 +379,7 @@ export default function CheckoutFlow() {
         promoCode,
         method: deliveryMethod,
         paymentMethod: paymentMethodDisplay,
-        transactionId: paymentType === 'upi' ? (upiUtr ? `UTR_${upiUtr}` : `UPI_${Date.now()}`) : undefined
+        transactionId: paymentType === 'upi' ? (externalTxnId || upiTxnId || `UPI_${Date.now()}`) : undefined
       };
 
       // Call backend order creation API (which enforces server-side price verification)
@@ -398,14 +467,14 @@ export default function CheckoutFlow() {
       <div className="steps">
         
         {/* STEP 1: CONTACT & DELIVERY ADDRESS */}
-        <section className="step" data-state={currentStep === 'contact' ? 'active' : 'done'}>
+        <section ref={stepContactRef} id="checkout-step-contact" className="step" data-state={currentStep === 'contact' ? 'active' : 'done'}>
           <div className="step__head">
             <span className="step__num">1</span>
             <h2 className="step__title">Delivery Address</h2>
             {currentStep !== 'contact' && (
               <>
-                <p className="step__sum">{firstName} {lastName} · {line1}, {city} {postal}</p>
-                <button className="link step__edit" type="button" onClick={() => setCurrentStep('contact')}>Edit</button>
+                <p className="step__sum">{fullName || 'Customer'} · {line1}, {city} {postal}</p>
+                <button className="link step__edit" type="button" onClick={() => goToStep('contact')}>Edit</button>
               </>
             )}
           </div>
@@ -423,7 +492,7 @@ export default function CheckoutFlow() {
                     style={{ accentColor: 'var(--c-moss)', cursor: 'pointer' }}
                   />
                   <label htmlFor="addr-default" style={{ fontSize: '13px', cursor: 'pointer' }}>
-                    <strong>Default Home Address:</strong> {firstName || 'Customer'} · {line1}, {city} {postal}
+                    <strong>Default Home Address:</strong> {fullName || 'Customer'} · {line1}, {city} {postal}
                   </label>
                 </div>
                 <span style={{ fontSize: '11px', background: '#e8efe9', color: '#2e3a2f', padding: '3px 8px', borderRadius: '999px', fontWeight: 600 }}>SAVED</span>
@@ -441,18 +510,17 @@ export default function CheckoutFlow() {
                 {errors.email && <em className="field__err">{errors.email}</em>}
               </label>
 
-              <div className="row2">
-                <label className="field">
-                  <span>First name</span>
-                  <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
-                  {errors.first && <em className="field__err">{errors.first}</em>}
-                </label>
-                <label className="field">
-                  <span>Last name</span>
-                  <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
-                  {errors.last && <em className="field__err">{errors.last}</em>}
-                </label>
-              </div>
+              <label className="field">
+                <span>Full Name</span>
+                <input 
+                  type="text" 
+                  value={fullName} 
+                  onChange={e => setFullName(e.target.value)} 
+                  placeholder="e.g. Chaitanya Kumar"
+                  required 
+                />
+                {errors.fullName && <em className="field__err">{errors.fullName}</em>}
+              </label>
 
               <label className="field">
                 <span>Street Address</span>
@@ -519,7 +587,7 @@ export default function CheckoutFlow() {
                   className="pill pill--ink" 
                   type="button" 
                   onClick={() => {
-                    if (validateContact()) setCurrentStep('delivery');
+                    if (validateContact()) goToStep('delivery');
                   }}
                 >
                   Continue to Delivery
@@ -530,7 +598,7 @@ export default function CheckoutFlow() {
         </section>
 
         {/* STEP 2: DELIVERY SPEED (Canonical Shipping: Standard ₹8.00 / Express ₹18.00, Free over ₹150) */}
-        <section className="step" data-state={currentStep === 'delivery' ? 'active' : currentStep === 'contact' ? 'todo' : 'done'}>
+        <section ref={stepDeliveryRef} id="checkout-step-delivery" className="step" data-state={currentStep === 'delivery' ? 'active' : currentStep === 'contact' ? 'todo' : 'done'}>
           <div className="step__head">
             <span className="step__num">2</span>
             <h2 className="step__title">Delivery Speed</h2>
@@ -539,7 +607,7 @@ export default function CheckoutFlow() {
                 <p className="step__sum">
                   {deliveryMethod === 'express' ? 'Express Courier · 1–2 Days (₹18.00)' : `Standard Trail · 3–5 Days (${quote.freeShipLeft === 0 ? 'FREE' : '₹8.00'})`}
                 </p>
-                <button className="link step__edit" type="button" onClick={() => setCurrentStep('delivery')}>Edit</button>
+                <button className="link step__edit" type="button" onClick={() => goToStep('delivery')}>Edit</button>
               </>
             )}
           </div>
@@ -616,7 +684,7 @@ export default function CheckoutFlow() {
               </fieldset>
 
               <div className="step__actions" style={{ marginTop: '20px' }}>
-                <button className="pill pill--ink" type="button" onClick={() => setCurrentStep('payment')}>
+                <button className="pill pill--ink" type="button" onClick={() => goToStep('payment')}>
                   Continue to Payment
                 </button>
               </div>
@@ -625,7 +693,7 @@ export default function CheckoutFlow() {
         </section>
 
         {/* STEP 3: PAYMENT ENGINE (UPI / Card / NetBanking / COD) */}
-        <section className="step" data-state={currentStep === 'payment' ? 'active' : 'todo'}>
+        <section ref={stepPaymentRef} id="checkout-step-payment" className="step" data-state={currentStep === 'payment' ? 'active' : 'todo'}>
           <div className="step__head">
             <span className="step__num">3</span>
             <h2 className="step__title">Payment Method</h2>
@@ -745,144 +813,98 @@ export default function CheckoutFlow() {
               </div>
 
               {/* UPI */}
-              {paymentType === 'upi' && (
-                <div style={{ background: '#fff', border: '1px solid var(--c-line)', borderRadius: '16px', padding: '20px' }}>
-                  <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
-                    <button 
-                      type="button" 
-                      onClick={() => setUpiMode('qr')} 
-                      style={{
-                        flex: 1,
-                        padding: '8px',
-                        borderRadius: '999px',
-                        border: '1px solid var(--c-line)',
-                        background: upiMode === 'qr' ? 'var(--c-moss)' : '#f4f0e9',
-                        color: upiMode === 'qr' ? '#fff' : 'inherit',
-                        fontWeight: 600,
-                        fontSize: '13px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Instant QR Code
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => setUpiMode('id')} 
-                      style={{
-                        flex: 1,
-                        padding: '8px',
-                        borderRadius: '999px',
-                        border: '1px solid var(--c-line)',
-                        background: upiMode === 'id' ? 'var(--c-moss)' : '#f4f0e9',
-                        color: upiMode === 'id' ? '#fff' : 'inherit',
-                        fontWeight: 600,
-                        fontSize: '13px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Enter UPI ID
-                    </button>
-                  </div>
+              {paymentType === 'upi' && (() => {
+                const storeUpiId = process.env.NEXT_PUBLIC_STORE_UPI_ID || 'annemchaitanyakumarreddy@sbi';
+                const storeName = process.env.NEXT_PUBLIC_STORE_NAME || 'ANGADI Outdoor';
+                const upiPayUri = `upi://pay?pa=${encodeURIComponent(storeUpiId)}&pn=${encodeURIComponent(storeName)}&am=${quote.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent('ANGADI Order ' + upiSessionId)}`;
+                const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(upiPayUri)}`;
 
-                  {upiMode === 'qr' ? (() => {
-                    const storeUpiId = process.env.NEXT_PUBLIC_STORE_UPI_ID || 'annemchaitanyakumarreddy@sbi';
-                    const storeName = process.env.NEXT_PUBLIC_STORE_NAME || 'ANGADI Outdoor';
-                    const upiPayUri = `upi://pay?pa=${encodeURIComponent(storeUpiId)}&pn=${encodeURIComponent(storeName)}&am=${quote.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent('ANGADI Order')}`;
-                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=${encodeURIComponent(upiPayUri)}`;
-
-                    return (
-                      <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                        <div style={{ 
-                          width: '190px', 
-                          height: '190px', 
-                          margin: '0 auto 12px', 
-                          background: '#fff', 
-                          border: '1px solid var(--c-line)', 
-                          borderRadius: '16px', 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'center',
-                          overflow: 'hidden',
-                          padding: '8px'
-                        }}>
-                          <img 
-                            src={qrCodeUrl} 
-                            alt={`UPI QR code to pay ₹${quote.total.toFixed(2)} to ${storeUpiId}`} 
-                            width="174" 
-                            height="174" 
-                            style={{ display: 'block', borderRadius: '8px' }}
-                          />
-                        </div>
-
-                        <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--c-moss)', margin: '0 0 4px' }}>
-                          Scan & pay ₹{quote.total.toFixed(2)} to <code style={{ background: '#f4f0e9', padding: '2px 6px', borderRadius: '4px' }}>{storeUpiId}</code>
-                        </p>
-                        <p style={{ fontSize: '12px', color: 'var(--c-muted)', margin: '0 0 14px' }}>
-                          Google Pay · PhonePe · Paytm · CRED · BHIM
-                        </p>
-
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '14px' }}>
-                          <a 
-                            href={upiPayUri}
-                            className="pill pill--light"
-                            style={{ height: '38px', padding: '0 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                            Open in UPI App
-                          </a>
-                        </div>
-
-                        <div style={{ maxWidth: '320px', margin: '0 auto 10px', textAlign: 'left' }}>
-                          <label className="field">
-                            <span style={{ fontSize: '12px', fontWeight: 600 }}>UPI Reference / UTR Number (optional)</span>
-                            <input 
-                              type="text" 
-                              value={upiUtr} 
-                              onChange={e => setUpiUtr(e.target.value.replace(/\D/g, '').slice(0, 12))} 
-                              placeholder="12-digit UTR from your bank receipt" 
-                              maxLength={12}
-                            />
-                          </label>
-                        </div>
-
-                        <button 
-                          type="button" 
-                          className="pill pill--clay" 
-                          onClick={() => setUpiApproved(true)}
-                          style={{ height: '38px', fontSize: '13px', width: '100%', maxWidth: '320px' }}
-                        >
-                          {upiApproved ? '✓ Payment Confirmed' : 'I have completed payment'}
-                        </button>
-                      </div>
-                    );
-                  })() : (
-                    <div>
-                      <label className="field">
-                        <span>Virtual Payment Address (UPI ID)</span>
-                        <input 
-                          type="text" 
-                          value={upiId} 
-                          onChange={e => setUpiId(e.target.value)} 
-                          placeholder="yourname@okhdfcbank" 
-                        />
-                        {errors.upiId && <em className="field__err">{errors.upiId}</em>}
-                      </label>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
-                        {['@okhdfcbank', '@okaxis', '@ybl', '@paytm'].map(suffix => (
-                          <button 
-                            key={suffix} 
-                            type="button" 
-                            onClick={() => setUpiId((upiId.split('@')[0] || 'runner') + suffix)} 
-                            style={{ fontSize: '11px', background: '#f4f0e9', border: 'none', padding: '4px 10px', borderRadius: '999px', cursor: 'pointer' }}
-                          >
-                            {suffix}
-                          </button>
-                        ))}
-                      </div>
+                return (
+                  <div style={{ background: '#fff', border: '1px solid var(--c-line)', borderRadius: '16px', padding: '24px 20px', textAlign: 'center' }}>
+                    <div style={{ 
+                      width: '200px', 
+                      height: '200px', 
+                      margin: '0 auto 14px', 
+                      background: '#fff', 
+                      border: '1px solid var(--c-line)', 
+                      borderRadius: '16px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      padding: '8px',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.06)'
+                    }}>
+                      <img 
+                        src={qrCodeUrl} 
+                        alt={`UPI QR code to pay ₹${quote.total.toFixed(2)} to ${storeUpiId}`} 
+                        width="184" 
+                        height="184" 
+                        style={{ display: 'block', borderRadius: '8px' }}
+                      />
                     </div>
-                  )}
-                </div>
-              )}
+
+                    <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--c-moss)', margin: '0 0 6px' }}>
+                      Scan &amp; pay ₹{quote.total.toFixed(2)} to <code style={{ background: '#f4f0e9', padding: '2px 8px', borderRadius: '6px' }}>{storeUpiId}</code>
+                    </p>
+                    <p style={{ fontSize: '12px', color: 'var(--c-muted)', margin: '0 0 16px' }}>
+                      Google Pay · PhonePe · Paytm · CRED · BHIM
+                    </p>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                      <a 
+                        href={upiPayUri}
+                        className="pill pill--light"
+                        style={{ height: '40px', padding: '0 18px', fontSize: '13px', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        Open in UPI App
+                      </a>
+
+                      <button
+                        type="button"
+                        className="pill pill--ink"
+                        onClick={() => {
+                          setUpiStatus('paid');
+                          const txn = `DEMO_UPI_${Date.now()}`;
+                          setUpiTxnId(txn);
+                          handlePlaceOrder(txn);
+                        }}
+                        style={{ height: '40px', padding: '0 18px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Simulate Payment (Demo)
+                      </button>
+                    </div>
+
+                    {/* Automatic Live Payment Tracking Indicator */}
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      background: upiStatus === 'paid' ? '#e8f5e9' : '#f0f5ee',
+                      border: upiStatus === 'paid' ? '1px solid #a5d6a7' : '1px solid #c8dec6',
+                      padding: '10px 20px',
+                      borderRadius: '999px',
+                      margin: '4px auto 0'
+                    }}>
+                      <span style={{
+                        width: '9px',
+                        height: '9px',
+                        borderRadius: '50%',
+                        background: upiStatus === 'paid' ? '#2e7d32' : '#388e3c',
+                        boxShadow: '0 0 0 4px rgba(46,125,50,0.18)',
+                        display: 'inline-block'
+                      }} />
+                      <span style={{ fontSize: '13px', fontWeight: 600, color: upiStatus === 'paid' ? '#1b5e20' : '#2e3a2f' }}>
+                        {upiStatus === 'paid' 
+                          ? '✓ Payment confirmed · Placing your order...' 
+                          : 'Waiting for payment · Scan QR or click Simulate Payment'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* CARDS */}
               {paymentType === 'card' && (
@@ -974,7 +996,13 @@ export default function CheckoutFlow() {
                   className="pill pill--ink" 
                   disabled={isSubmitting || isQuoting}
                   onClick={() => {
-                    if (validatePayment()) handlePlaceOrder();
+                    if (paymentType === 'upi') {
+                      fetch(`/api/checkout/payment-status?id=${encodeURIComponent(upiSessionId)}&verify=true`)
+                        .then(() => handlePlaceOrder(`UPI_${Date.now()}`))
+                        .catch(() => handlePlaceOrder());
+                    } else if (validatePayment()) {
+                      handlePlaceOrder();
+                    }
                   }}
                   style={{
                     width: '100%',
@@ -985,7 +1013,12 @@ export default function CheckoutFlow() {
                     boxShadow: '0 8px 24px rgba(46,58,47,0.22)'
                   }}
                 >
-                  {isSubmitting ? (submitStatus || 'Processing order...') : `Place order · ₹${quote.total.toFixed(2)}`}
+                  {isSubmitting 
+                    ? (submitStatus || 'Processing order...') 
+                    : paymentType === 'upi'
+                      ? (upiStatus === 'paid' ? 'Payment confirmed · Placing order...' : `Place order · ₹${quote.total.toFixed(2)}`)
+                      : `Place order · ₹${quote.total.toFixed(2)}`
+                  }
                 </button>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '14px', fontSize: '12px', color: 'var(--c-muted)' }}>
                   <span>Free 60-day returns</span>

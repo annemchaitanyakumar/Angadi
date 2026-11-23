@@ -38,6 +38,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -45,12 +48,32 @@ export default function RootLayout({ children }) {
                 d.classList.add('js');
                 if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('rm');
                 setTimeout(function () { d.classList.add('failsafe'); }, 4000);
+                if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var i = 0; i < regs.length; i++) regs[i].unregister();
+                  });
+                }
               })(document.documentElement);
               window.addEventListener('error', function (e) {
-                if (e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
-                  window.location.reload();
+                var target = e.target;
+                if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK')) {
+                  var src = target.src || target.href || '';
+                  if (src.indexOf('/_next/static/') !== -1) {
+                    var retries = parseInt(sessionStorage.getItem('__chunk_retry') || '0', 10);
+                    if (retries < 2) {
+                      sessionStorage.setItem('__chunk_retry', String(retries + 1));
+                      window.location.reload();
+                    }
+                  }
                 }
-              });
+                if (e.message && (e.message.indexOf('Loading chunk') !== -1 || e.message.indexOf('ChunkLoadError') !== -1)) {
+                  var retries = parseInt(sessionStorage.getItem('__chunk_retry') || '0', 10);
+                  if (retries < 2) {
+                    sessionStorage.setItem('__chunk_retry', String(retries + 1));
+                    window.location.reload();
+                  }
+                }
+              }, true);
             `
           }}
         />

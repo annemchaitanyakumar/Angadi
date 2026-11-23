@@ -31,7 +31,7 @@ if (typeof window !== 'undefined' && !window.__tab_account_initialized) {
         }
       } catch {}
       try {
-        return originalGetItem.call(this, key);
+        return originalGetItem.apply(this, arguments);
       } catch {
         return null;
       }
@@ -45,7 +45,7 @@ if (typeof window !== 'undefined' && !window.__tab_account_initialized) {
         }
       } catch {}
       try {
-        return originalSetItem.call(this, key, val);
+        return originalSetItem.apply(this, arguments);
       } catch {}
     };
   } catch {}

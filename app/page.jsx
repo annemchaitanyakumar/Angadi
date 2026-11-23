@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function HomePage() {
           </div>
 
           <figure className="hero__model" data-bands="12">
-            <img src="/photos/158-angadi/hero-model.webp" width="949" height="1400" alt="Trail runner in a clay-orange ANGADI running shell" fetchPriority="high" />
+            <img src="/photos/158-angadi/hero-model.webp?v=3" width="949" height="1400" alt="Trail runner in a clay-orange ANGADI running shell" fetchPriority="high" />
           </figure>
 
           <aside className="hero__proof" data-intro>
@@ -144,10 +145,10 @@ export default function HomePage() {
           <div className="trail__stage">
             <h2 className="sr-only" id="trail-h">Trail</h2>
             <p className="trail__note trail__note--r">Stay light, stay dry. Our shells pack into their own pocket and shrug off the weather halfway up.</p>
-            <figure className="tcard tcard--left" data-blinds><img src="/photos/158-angadi/trail-left.jpg" width="960" height="1280" alt="Hands tightening the straps of a clay-orange running vest" loading="lazy" /></figure>
+            <figure className="tcard tcard--left" data-blinds><img src="/photos/158-angadi/trail-left.jpg?v=2" width="960" height="1280" alt="Hands tightening the straps of a clay-orange running vest" loading="lazy" /></figure>
             <div className="trail__word" aria-hidden="true"><span>T</span><span>R</span><span>A</span><span>I</span><span>L</span></div>
-            <figure className="tcard tcard--main" data-blinds><img src="/photos/158-angadi/trail-main.jpg" width="960" height="1280" alt="Runner in a moss-green hooded shell and neck gaiter" loading="lazy" /></figure>
-            <figure className="tcard tcard--right" data-blinds><img src="/photos/158-angadi/trail-right.jpg" width="960" height="1280" alt="Gloved hand on charcoal trail shorts" loading="lazy" /></figure>
+            <figure className="tcard tcard--main" data-blinds><img src="/photos/158-angadi/trail-main.jpg?v=2" width="960" height="1280" alt="Runner in a moss-green hooded shell and neck gaiter" loading="lazy" /></figure>
+            <figure className="tcard tcard--right" data-blinds><img src="/photos/158-angadi/trail-right.jpg?v=2" width="960" height="1280" alt="Gloved hand on charcoal trail shorts" loading="lazy" /></figure>
             <p className="trail__note trail__note--l">Performance layers for runners who leave the road, built for summer heat and alpine cold.</p>
           </div>
         </section>
@@ -161,13 +162,13 @@ export default function HomePage() {
           </div>
           <div className="picks__row">
             <a className="pcard" href="/product?id=butte" data-vt="butte">
-              <figure data-blinds><img src="/photos/158-angadi/pick-1.jpg" width="960" height="1280" alt="Runner in an olive anorak with a sand sling pack" loading="lazy" /></figure>
+              <figure data-blinds><img src="/photos/158-angadi/pick-1.jpg?v=2" width="960" height="1280" alt="Runner in an olive anorak with a sand sling pack" loading="lazy" /></figure>
               <span className="pcard__season">Spring / Summer<br />2026</span>
               <span className="pcard__title" data-scramble>Packed light,<br />built to last</span>
               <span className="pcard__chip"><i></i>Kothaga Vachinavi</span>
             </a>
             <a className="pcard" href="/product?id=talus" data-vt="talus">
-              <figure data-blinds><img src="/photos/158-angadi/pick-2.jpg" width="960" height="1280" alt="Runner in a charcoal half-zip shell with a clay zip pull" loading="lazy" /></figure>
+              <figure data-blinds><img src="/photos/158-angadi/pick-2.jpg?v=2" width="960" height="1280" alt="Runner in a charcoal half-zip shell with a clay zip pull" loading="lazy" /></figure>
               <span className="pcard__season">Spring / Summer<br />2026</span>
               <span className="pcard__title" data-scramble>New shells for<br />harder weather</span>
               <span className="pcard__chip"><i></i>Kothaga Vachinavi</span>
@@ -180,7 +181,7 @@ export default function HomePage() {
           <div className="pack__stage">
             <div className="pack__row pack__row--top" aria-hidden="true"><span>Into the wild · Into the wild · Into the wild ·</span></div>
             <article className="pack__card">
-              <figure data-blinds><img src="/photos/158-angadi/group.jpg" width="960" height="1280" alt="Four trail runners in ANGADI layers standing together" loading="lazy" /></figure>
+              <figure data-blinds><img src="/photos/158-angadi/group.jpg?v=2" width="960" height="1280" alt="Four trail runners in ANGADI layers standing together" loading="lazy" /></figure>
               <p className="pack__logo" aria-hidden="true">ANGADI</p>
               <p className="pack__eyebrow">Level up</p>
               <h2 className="pack__title" id="pack-h" data-scramble>Run with<br />the pack</h2>
@@ -219,46 +220,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="footer" id="footer">
-        <p className="footer__big" data-scramble>See you<br />out there</p>
-        <div className="footer__cols">
-          <form className="join" noValidate>
-            <label className="join__label" htmlFor="join-email">First access to every drop</label>
-            <div className="join__row">
-              <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
-              <button className="pill pill--clay" type="submit">Join</button>
-            </div>
-            <p className="join__msg" role="status" aria-live="polite"></p>
-          </form>
-          <nav className="footer__links" aria-label="Footer">
-            <div>
-              <h3>Dukanam</h3>
-              <a href="/shop">Dukanam</a>
-              <a href="/shop?category=Jackets">Jackets</a>
-              <a href="/#look">Lookbook</a>
-            </div>
-            <div>
-              <h3>Sahayam</h3>
-              <a href="/help#shipping">Shipping</a>
-              <a href="/help#returns">Returns</a>
-              <a href="/help#sizes">Size guide</a>
-              <a href="/help#contact">Contact</a>
-            </div>
-            <div>
-              <h3>Company</h3>
-              <a href="/about">Maa Gurinchi</a>
-              <a href="/about#repairs">Repairs</a>
-              <a href="/account">Account</a>
-              <a href="/admin">Store admin</a>
-            </div>
-          </nav>
-        </div>
-        <div className="footer__base">
-          <span>© 2026 ANGADI Outdoor</span>
-          <span>Free returns within 60 days</span>
-          <a href="#top">Back to top</a>
-        </div>
-      </footer>
+      <Footer />
 
       <dialog className="film" aria-label="SS26 trail film">
         <button className="iconbtn iconbtn--light film__close" type="button" data-close aria-label="Close film"><svg width="20" height="20"><use href="#i-close"/></svg></button>

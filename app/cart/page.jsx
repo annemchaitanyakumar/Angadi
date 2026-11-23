@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, Suspense } from 'react';
+import Footer from '@/components/Footer';
 
 function CartInner() {
   useEffect(() => {
@@ -110,29 +111,7 @@ function CartInner() {
   </main>
 
   {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
-<footer className="footer" id="footer">
-  <p className="footer__big" data-scramble>See you<br />out there</p>
-  <div className="footer__cols">
-    <form className="join" noValidate>
-      <label className="join__label" htmlFor="join-email">First access to every drop</label>
-      <div className="join__row">
-        <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
-        <button className="pill pill--clay" type="submit">Join</button>
-      </div>
-      <p className="join__msg" role="status" aria-live="polite"></p>
-    </form>
-    <nav className="footer__links" aria-label="Footer">
-      <div><h3>Dukanam</h3><a href="/shop/">Dukanam</a><a href="/shop/?category=Jackets">Jackets</a><a href="/#look">Lookbook</a></div>
-      <div><h3>Sahayam</h3><a href="/help/#shipping">Shipping</a><a href="/help/#returns">Returns</a><a href="/help/#sizes">Size guide</a><a href="/help/#contact">Contact</a></div>
-      <div><h3>Company</h3><a href="/about/">Maa Gurinchi</a><a href="/about/#repairs">Repairs</a><a href="/account/">Account</a><a href="/admin/">Store admin</a></div>
-    </nav>
-  </div>
-  <div className="footer__base">
-    <span>© 2026 ANGADI Outdoor</span>
-    <span>Free returns within 60 days</span>
-    <a href="#top">Back to top</a>
-  </div>
-</footer>
+<Footer />
 
   {/*  ANGADI — trail & outdoor running apparel — © 2026 Hasib (OVERSHOOT). All rights reserved. Licensed, not sold: see LICENSE.md.  */}
     </div>

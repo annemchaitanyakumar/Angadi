@@ -1,4 +1,5 @@
 import { getProduct, getProducts } from '@/lib/db';
+import Footer from '@/components/Footer';
 import ProductClient from './ProductClient';
 
 function getRelated(product, allProducts = []) {
@@ -24,6 +25,131 @@ export default async function ProductPage({ searchParams }) {
 
   return (
     <div className="page page--product">
+      <style>{`
+        /* Desktop defaults: mobile-only elements hidden */
+        .pd__heart-mobile {
+          display: none !important;
+        }
+        .pd__stepper-mobile {
+          display: none !important;
+        }
+        @media (max-width: 1000px) {
+          /* 1. Mobile fixed wishlist heart on top-right of product gallery */
+          .pd__gallery {
+            position: relative !important;
+            display: block !important;
+          }
+          .pd__stage {
+            position: static !important;
+          }
+          .pd__heart-mobile {
+            display: inline-grid !important;
+            position: absolute !important;
+            top: 14px !important;
+            right: 14px !important;
+            z-index: 30 !important;
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            background: rgba(244, 239, 230, 0.94) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            border: 1px solid rgba(46, 58, 47, 0.14) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+            color: var(--c-moss, #2e3a2f) !important;
+            place-items: center !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+          }
+          .pd__heart-mobile svg {
+            fill: none;
+            transition: fill 0.2s, transform 0.2s;
+          }
+          .pd__heart-mobile[aria-pressed="true"] {
+            color: var(--c-clay, #b5562f) !important;
+          }
+          .pd__heart-mobile[aria-pressed="true"] svg {
+            fill: var(--c-clay, #b5562f) !important;
+          }
+
+          /* 2. Hide separate quantity stepper and desktop heart from .pd__buy on mobile */
+          .pd__buy .qty,
+          .pd__buy > .qty,
+          .pd__buy .iconbtn,
+          .pd__buy > .iconbtn {
+            display: none !important;
+          }
+          .pd__buy {
+            display: block !important;
+            grid-template-columns: 1fr !important;
+            width: 100% !important;
+            margin-top: 16px !important;
+          }
+          .pd__buy .pd__add {
+            width: 100% !important;
+            height: 56px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 999px !important;
+            font-size: 15px !important;
+            font-weight: 600 !important;
+          }
+
+          /* 3. In-button Stepper inside "Butta lo Vey" when active on mobile */
+          .pd__add.has-stepper {
+            background: var(--c-moss, #2e3a2f) !important;
+            padding: 0 8px !important;
+          }
+          .pd__add.has-stepper .label-add,
+          .pd__add.has-stepper .label-done {
+            display: none !important;
+          }
+          .pd__add.has-stepper .pd__stepper-mobile {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            height: 100% !important;
+            padding: 0 4px !important;
+            user-select: none !important;
+          }
+          .pd__stepper-mobile .btn-step {
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            display: inline-grid !important;
+            place-items: center !important;
+            background: rgba(244, 239, 230, 0.22) !important;
+            color: #fff8f0 !important;
+            cursor: pointer !important;
+            transition: background-color 0.2s, transform 0.15s !important;
+            flex-shrink: 0 !important;
+          }
+          .pd__stepper-mobile .btn-step:hover,
+          .pd__stepper-mobile .btn-step:active {
+            background: var(--c-clay, #b5562f) !important;
+            transform: scale(0.92) !important;
+          }
+          .pd__stepper-mobile .btn-step__txt {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.04em !important;
+            color: #fff8f0 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+          }
+          .pd__stepper-mobile [data-qty-mobile] {
+            font-size: 17px !important;
+            font-weight: 700 !important;
+            min-width: 16px !important;
+            text-align: center !important;
+          }
+        }
+      `}</style>
       <header className="topbar" data-topbar>
         <button className="iconbtn topbar__burger" type="button" data-open-menu aria-expanded="false" aria-controls="menu" aria-label="Open menu">
           <svg width="22" height="22"><use href="#i-menu" /></svg>
@@ -282,46 +408,7 @@ export default async function ProductPage({ searchParams }) {
         </section>
       </main>
 
-      <footer className="footer" id="footer">
-        <p className="footer__big" data-scramble>See you<br />out there</p>
-        <div className="footer__cols">
-          <form className="join" noValidate>
-            <label className="join__label" htmlFor="join-email">First access to every drop</label>
-            <div className="join__row">
-              <input id="join-email" name="email" type="email" autoComplete="email" placeholder="you@trailmail.com" required />
-              <button className="pill pill--clay" type="submit">Join</button>
-            </div>
-            <p className="join__msg" role="status" aria-live="polite"></p>
-          </form>
-          <nav className="footer__links" aria-label="Footer">
-            <div>
-              <h3>Dukanam</h3>
-              <a href="/shop/">Dukanam</a>
-              <a href="/shop/?category=Jackets">Jackets</a>
-              <a href="/#look">Lookbook</a>
-            </div>
-            <div>
-              <h3>Sahayam</h3>
-              <a href="/help/#shipping">Shipping</a>
-              <a href="/help/#returns">Returns</a>
-              <a href="/help/#sizes">Size guide</a>
-              <a href="/help/#contact">Contact</a>
-            </div>
-            <div>
-              <h3>Company</h3>
-              <a href="/about/">Maa Gurinchi</a>
-              <a href="/about/#repairs">Repairs</a>
-              <a href="/account/">Account</a>
-              <a href="/admin/">Store admin</a>
-            </div>
-          </nav>
-        </div>
-        <div className="footer__base">
-          <span>© 2026 ANGADI Outdoor</span>
-          <span>Free returns within 60 days</span>
-          <a href="#top">Back to top</a>
-        </div>
-      </footer>
+      <Footer />
 
       <dialog className="zoom" aria-label="Product photos">
         <img className="zoom__img" src="" alt="" />
