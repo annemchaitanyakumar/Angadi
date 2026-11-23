@@ -76,7 +76,7 @@ export default function AccountAuthSync() {
       // Update the demo note to reflect real cloud authentication
       const noteEl = authForm.querySelector('.note span');
       if (noteEl) {
-        noteEl.textContent = 'Secured by Supabase Cloud Authentication. Your account and orders sync across all devices.';
+        noteEl.textContent = 'Your account and orders sync securely across all your devices.';
       }
 
       // Check whether user is in "Create account" or "Sign in" tab

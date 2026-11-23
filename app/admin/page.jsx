@@ -45,8 +45,7 @@ function AdminInner() {
             <p className="signin__mark signin__mark--sm" aria-hidden="true">ANGADI</p>
             <h1 className="signin__title">Sign in to the admin</h1>
             <p className="signin__note">
-              <strong>Demo account.</strong> The details are filled in for you. This is a front-end demo, so the sign-in
-              only lives in this tab; a real admin sign-in needs a server.
+              Sign in with your administrator credentials to manage catalog, orders, and customer fulfillment.
             </p>
             <form className="signin__form" id="signin-form" noValidate>
               <div className="field">

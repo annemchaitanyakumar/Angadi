@@ -87,7 +87,7 @@ export default function OrderTrackingClient() {
               at: t.created_at
             })),
             method: 'standard',
-            payment: { brand: dbO.payment_method || 'Test Card', last4: '4242' }
+            payment: { brand: dbO.payment_method || 'Online Payment', last4: '4242' }
           };
 
           // If subtotal + shipping doesn't match total, deduce tax/discount
@@ -530,7 +530,7 @@ export default function OrderTrackingClient() {
             <h3 style={{ fontSize: '15px', fontWeight: 800, margin: '0 0 12px' }}>Payment Authorized</h3>
             <p style={{ margin: 0, fontSize: '13px', color: '#576255', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: '#2e7d32', fontWeight: 700 }}>✓ PAID</span>
-              <span>· {order.payment?.brand || 'Test Card'}</span>
+              <span>· {order.payment?.brand || 'Online Payment'}</span>
             </p>
           </section>
 

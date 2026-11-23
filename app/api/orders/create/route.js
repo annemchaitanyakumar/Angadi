@@ -86,6 +86,10 @@ export async function POST(request) {
     const orderId = body.orderId || `ANG-${new Date().getFullYear()}-${randomSuffix}`;
     const now = new Date().toISOString();
 
+    const isCod = paymentMethod?.toLowerCase().includes('cod');
+    const paymentStatus = isCod ? 'pending' : 'paid';
+    const txnId = body.transactionId || (isCod ? `COD_${Date.now()}` : `UPI_${Date.now()}`);
+
     // 1. Insert into public.orders with authoritative server figures
     const { data: orderData, error: orderError } = await supabase
       .from('orders')
@@ -98,9 +102,9 @@ export async function POST(request) {
         total: serverTotal,
         currency: 'INR',
         status: 'placed',
-        payment_status: 'paid',
-        payment_method: paymentMethod || 'test_card',
-        transaction_id: `TXN_${Date.now()}`,
+        payment_status: paymentStatus,
+        payment_method: paymentMethod || (isCod ? 'Cash on Delivery' : 'UPI'),
+        transaction_id: txnId,
         shipping_address: address,
         created_at: now,
         updated_at: now
@@ -136,7 +140,7 @@ export async function POST(request) {
     await supabase.from('order_timeline').insert({
       order_id: orderId,
       status: 'placed',
-      note: 'Order placed and payment confirmed (Server Verified)',
+      note: isCod ? 'Order placed with Cash on Delivery' : `Order placed via ${paymentMethod || 'UPI'} (${txnId})`,
       created_at: now
     });
 

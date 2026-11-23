@@ -36,7 +36,7 @@ import{B as e,H as t,I as n,h as r,j as i,r as a,u as o,v as s,z as c}from"./sto
       <section class="step" data-step="payment" aria-labelledby="st-payment">
         <div class="step__head"><span class="step__num">3</span><h2 class="step__title" id="st-payment">Payment</h2><p class="step__sum" data-sum-of="payment"></p><button class="link step__edit" type="button" data-edit="payment" hidden>Edit</button></div>
         <div class="step__body">
-          <p class="note"><svg width="18" height="18" aria-hidden="true"><use href="#i-lock"/></svg><span>This is a demo store: no card is charged and card details never leave your browser. Use test card <strong>4242 4242 4242 4242</strong>, any future date and any CVC. <button class="link" type="button" data-testcard>Fill it in for me</button></span></p>
+          <p class="note"><svg width="18" height="18" aria-hidden="true"><use href="#i-lock"/></svg><span>All transactions are encrypted. Your payment details are tokenized and processed securely.</span></p>
           ${E(`cardname`,`Name on card`,`autocomplete="cc-name" required`)}
           <div class="card-in">${E(`card`,`Card number`,`inputmode="numeric" autocomplete="cc-number" required placeholder="1234 1234 1234 1234" maxlength="23"`)}<span class="brand" data-brand aria-live="polite"></span></div>
           <div class="row2">${E(`exp`,`Expiry (MM / YY)`,`inputmode="numeric" autocomplete="cc-exp" required placeholder="MM / YY" maxlength="7"`)}${E(`cvc`,`Security code`,`inputmode="numeric" autocomplete="cc-csc" required placeholder="CVC" maxlength="4"`)}</div>

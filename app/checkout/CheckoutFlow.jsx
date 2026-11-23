@@ -60,6 +60,7 @@ export default function CheckoutFlow() {
   const [paymentType, setPaymentType] = useState('upi'); // 'upi' | 'card' | 'netbanking' | 'cod'
   const [upiMode, setUpiMode] = useState('qr'); // 'qr' | 'id'
   const [upiId, setUpiId] = useState('');
+  const [upiUtr, setUpiUtr] = useState('');
   const [upiApproved, setUpiApproved] = useState(false);
   const [cardName, setCardName] = useState('');
   const [cardNumber, setCardNumber] = useState('');
@@ -272,11 +273,16 @@ export default function CheckoutFlow() {
       const randomSuffix = Math.floor(1000 + Math.random() * 9000);
       const generatedOrderId = `ANG-${new Date().getFullYear()}-${randomSuffix}`;
 
-      let paymentMethodDisplay = 'Card';
-      if (paymentType === 'upi') paymentMethodDisplay = `UPI (${upiMode === 'qr' ? 'QR Scan' : upiId})`;
-      else if (paymentType === 'netbanking') paymentMethodDisplay = `NetBanking (${selectedBank})`;
-      else if (paymentType === 'cod') paymentMethodDisplay = 'Cash on Delivery (COD)';
-      else paymentMethodDisplay = `${cardBrand} ****${cardNumber.slice(-4) || '4242'}`;
+      let paymentMethodDisplay = 'UPI';
+      if (paymentType === 'upi') {
+        paymentMethodDisplay = upiUtr ? `UPI (UTR: ${upiUtr})` : `UPI (${upiMode === 'qr' ? 'QR Code' : upiId})`;
+      } else if (paymentType === 'cod') {
+        paymentMethodDisplay = 'Cash on Delivery (COD)';
+      } else if (paymentType === 'netbanking') {
+        paymentMethodDisplay = `NetBanking (${selectedBank})`;
+      } else {
+        paymentMethodDisplay = `${cardBrand} ****${cardNumber.slice(-4) || '4242'}`;
+      }
 
       const orderPayload = {
         orderId: generatedOrderId,
@@ -303,7 +309,8 @@ export default function CheckoutFlow() {
         })),
         promoCode,
         method: deliveryMethod,
-        paymentMethod: paymentMethodDisplay
+        paymentMethod: paymentMethodDisplay,
+        transactionId: paymentType === 'upi' ? (upiUtr ? `UTR_${upiUtr}` : `UPI_${Date.now()}`) : undefined
       };
 
       // Call backend order creation API (which enforces server-side price verification)
@@ -777,28 +784,78 @@ export default function CheckoutFlow() {
                     </button>
                   </div>
 
-                  {upiMode === 'qr' ? (
-                    <div style={{ textAlign: 'center', padding: '10px 0' }}>
-                      <div style={{ width: '160px', height: '160px', margin: '0 auto 12px', background: '#fbf9f5', border: '2px dashed var(--c-moss)', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="var(--c-moss)" strokeWidth="1.6">
-                          <rect width="6" height="6" x="3" y="3" rx="1"/>
-                          <rect width="6" height="6" x="15" y="3" rx="1"/>
-                          <rect width="6" height="6" x="3" y="15" rx="1"/>
-                          <path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"/>
-                        </svg>
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--c-clay)', marginTop: '4px' }}>₹{quote.total.toFixed(2)}</span>
+                  {upiMode === 'qr' ? (() => {
+                    const storeUpiId = process.env.NEXT_PUBLIC_STORE_UPI_ID || 'annemchaitanyakumarreddy@sbi';
+                    const storeName = process.env.NEXT_PUBLIC_STORE_NAME || 'ANGADI Outdoor';
+                    const upiPayUri = `upi://pay?pa=${encodeURIComponent(storeUpiId)}&pn=${encodeURIComponent(storeName)}&am=${quote.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent('ANGADI Order')}`;
+                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=${encodeURIComponent(upiPayUri)}`;
+
+                    return (
+                      <div style={{ textAlign: 'center', padding: '10px 0' }}>
+                        <div style={{ 
+                          width: '190px', 
+                          height: '190px', 
+                          margin: '0 auto 12px', 
+                          background: '#fff', 
+                          border: '1px solid var(--c-line)', 
+                          borderRadius: '16px', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center',
+                          overflow: 'hidden',
+                          padding: '8px'
+                        }}>
+                          <img 
+                            src={qrCodeUrl} 
+                            alt={`UPI QR code to pay ₹${quote.total.toFixed(2)} to ${storeUpiId}`} 
+                            width="174" 
+                            height="174" 
+                            style={{ display: 'block', borderRadius: '8px' }}
+                          />
+                        </div>
+
+                        <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--c-moss)', margin: '0 0 4px' }}>
+                          Scan & pay ₹{quote.total.toFixed(2)} to <code style={{ background: '#f4f0e9', padding: '2px 6px', borderRadius: '4px' }}>{storeUpiId}</code>
+                        </p>
+                        <p style={{ fontSize: '12px', color: 'var(--c-muted)', margin: '0 0 14px' }}>
+                          Google Pay · PhonePe · Paytm · CRED · BHIM
+                        </p>
+
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '14px' }}>
+                          <a 
+                            href={upiPayUri}
+                            className="pill pill--light"
+                            style={{ height: '38px', padding: '0 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            Open in UPI App
+                          </a>
+                        </div>
+
+                        <div style={{ maxWidth: '320px', margin: '0 auto 10px', textAlign: 'left' }}>
+                          <label className="field">
+                            <span style={{ fontSize: '12px', fontWeight: 600 }}>UPI Reference / UTR Number (optional)</span>
+                            <input 
+                              type="text" 
+                              value={upiUtr} 
+                              onChange={e => setUpiUtr(e.target.value.replace(/\D/g, '').slice(0, 12))} 
+                              placeholder="12-digit UTR from your bank receipt" 
+                              maxLength={12}
+                            />
+                          </label>
+                        </div>
+
+                        <button 
+                          type="button" 
+                          className="pill pill--clay" 
+                          onClick={() => setUpiApproved(true)}
+                          style={{ height: '38px', fontSize: '13px', width: '100%', maxWidth: '320px' }}
+                        >
+                          {upiApproved ? '✓ Payment Confirmed' : 'I have completed payment'}
+                        </button>
                       </div>
-                      <p style={{ fontSize: '13px', color: 'var(--c-muted)', margin: '0 0 12px' }}>Scan with GPay, PhonePe, Paytm, or any UPI app</p>
-                      <button 
-                        type="button" 
-                        className="pill pill--clay" 
-                        onClick={() => { setUpiApproved(true); alert('✅ Simulated UPI payment authorized!'); }}
-                        style={{ height: '38px', fontSize: '12px' }}
-                      >
-                        {upiApproved ? '✓ UPI Payment Approved' : 'Simulate App Approval (Test Mode)'}
-                      </button>
-                    </div>
-                  ) : (
+                    );
+                  })() : (
                     <div>
                       <label className="field">
                         <span>Virtual Payment Address (UPI ID)</span>
@@ -831,21 +888,7 @@ export default function CheckoutFlow() {
               {paymentType === 'card' && (
                 <div style={{ background: '#fff', border: '1px solid var(--c-line)', borderRadius: '16px', padding: '20px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--c-muted)' }}>Accepted: Visa, Mastercard, RuPay</span>
-                    <button 
-                      type="button" 
-                      className="link" 
-                      onClick={() => {
-                        setCardName(firstName ? `${firstName} ${lastName}` : 'Trail Runner');
-                        setCardNumber('4242 4242 4242 4242');
-                        setCardExp('12 / 28');
-                        setCardCvc('888');
-                        setCardBrand('Visa');
-                      }}
-                      style={{ fontSize: '12px', fontWeight: 600, color: 'var(--c-clay)' }}
-                    >
-                      Fill Test Card
-                    </button>
+                    <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--c-muted)' }}>Accepted: Visa, Mastercard, RuPay</span>
                   </div>
 
                   <label className="field">
@@ -890,7 +933,7 @@ export default function CheckoutFlow() {
               {/* NETBANKING */}
               {paymentType === 'netbanking' && (
                 <div style={{ background: '#fff', border: '1px solid var(--c-line)', borderRadius: '16px', padding: '20px' }}>
-                  <p style={{ fontSize: '13px', color: 'var(--c-muted)', margin: '0 0 14px' }}>Select your bank to proceed with test bank portal:</p>
+                  <p style={{ fontSize: '13px', color: 'var(--c-muted)', margin: '0 0 14px' }}>Select your bank:</p>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '10px' }}>
                     {['HDFC', 'ICICI', 'SBI', 'Axis', 'Kotak', 'Others'].map(bank => (
                       <button
@@ -942,12 +985,12 @@ export default function CheckoutFlow() {
                     boxShadow: '0 8px 24px rgba(46,58,47,0.22)'
                   }}
                 >
-                  {isSubmitting ? (submitStatus || 'Processing Order...') : `🔒 PLACE ORDER — ₹${quote.total.toFixed(2)}`}
+                  {isSubmitting ? (submitStatus || 'Processing order...') : `Place order · ₹${quote.total.toFixed(2)}`}
                 </button>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px 18px', flexWrap: 'wrap', marginTop: '14px', fontSize: '12px', color: 'var(--c-muted)' }}>
-                  <span>🔒 256-Bit SSL Encrypted</span>
-                  <span>🔄 60-Day Free Returns</span>
-                  <span>⚡ Fast Dispatch</span>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '14px', fontSize: '12px', color: 'var(--c-muted)' }}>
+                  <span>Free 60-day returns</span>
+                  <span>·</span>
+                  <span>Dispatches within 24 hours</span>
                 </div>
               </div>
 

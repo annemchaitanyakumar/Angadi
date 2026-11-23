@@ -100,7 +100,7 @@ function CartInner() {
           <p className="promo__msg" id="promo-msg" role="status" aria-live="polite"></p>
         </form>
         <a className="pill pill--ink" href="/checkout/" data-go-checkout>Checkout</a>
-        <p className="secure"><svg width="16" height="16" aria-hidden="true"><use href="#i-lock"/></svg>Secure checkout · demo store, no card is charged</p>
+        <p className="secure">Free shipping over ₹1,500 · 60-day returns</p>
       </aside>
     </div>
     <section className="also" aria-labelledby="also-h" data-also>

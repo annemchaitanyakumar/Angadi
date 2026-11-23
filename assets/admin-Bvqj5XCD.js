@@ -146,7 +146,7 @@ import{A as e,H as t,M as n,N as r,O as i,R as a,S as o,_ as s,b as c,c as l,f a
         <button type="button" class="iconbtn" data-close aria-label="Close order ${T(n.id)}">${S(`close`)}</button>
       </header>
       <div class="dr__body">
-        <div class="dr__status">${ve(n.status)}<span class="dr__src">${n.source===`store`?`Placed in the shop`:`Demo order`}</span></div>
+        <div class="dr__status">${ve(n.status)}<span class="dr__src">${n.source===`store`?`Online order`:`Store order`}</span></div>
 
         <section class="dr__sec" aria-labelledby="od-cust">
           <h3 id="od-cust" class="dr__h">Customer</h3>

@@ -12,7 +12,7 @@ import{C as e,D as t,E as n,H as r,_ as i,b as a,h as o,r as s,z as c}from"./sto
           <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required aria-describedby="e-email" /><em class="field__err" id="e-email"></em></label>
           <label class="field"><span>Password</span><input name="password" type="password" autocomplete="${e===`in`?`current-password`:`new-password`}" required minlength="8" aria-describedby="e-password h-password" /><em class="field__hint" id="h-password">At least 8 characters.</em><em class="field__err" id="e-password"></em></label>
           <button class="pill pill--ink" type="submit">${e===`in`?`Sign in`:`Create account`}</button>
-          <p class="note"><svg width="18" height="18" aria-hidden="true"><use href="#i-lock"/></svg><span>Demo store: your account lives in this browser only and your password is never stored. Use the email you checked out with to see those orders.</span></p>
+          <p class="note"><svg width="18" height="18" aria-hidden="true"><use href="#i-lock"/></svg><span>Your account and order history sync securely across your devices.</span></p>
         </form>
       </div>
       <div class="auth__art"><img src="/photos/158-solum/trail-main.jpg" width="1200" height="1600" alt="" /><p>Your orders, your wishlist, your next ascent.</p></div>
