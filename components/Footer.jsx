@@ -106,7 +106,6 @@ export default function Footer() {
       {/* Floating Glass Panel */}
       <div className="srsti-glass-panel">
         <div>
-          <p className="srsti-eyebrow">The Trail Dispatch</p>
           <p className="srsti-headline">
             First word on each new drop, and the runners behind it.
           </p>
@@ -168,26 +167,22 @@ export default function Footer() {
               <li><Link href="/help#shipping">Shipping</Link></li>
               <li><Link href="/help#returns">Returns</Link></li>
               <li><Link href="/help#sizes">Size Guide</Link></li>
+              <li><Link href="/terms">Terms &amp; Conditions</Link></li>
+              <li><Link href="/privacy">Privacy Policy</Link></li>
               <li><Link href="/help#contact">Sahayam &amp; Contact</Link></li>
               <li><Link href="/admin">Store Admin</Link></li>
             </ul>
           </nav>
         </div>
-
-        {/* Certifications & Trust Badges */}
-        <ul className="srsti-badges" aria-label="Certifications and Guarantees">
-          <li className="srsti-badge">Free 60-Day Returns</li>
-          <li className="srsti-badge">Dispatches within 24h</li>
-          <li className="srsti-badge">Ethically Crafted in India</li>
-          <li className="srsti-badge">Plastic-Neutral Packaging</li>
-          <li className="srsti-badge">Mountain Tested in Nilgiris</li>
-        </ul>
       </div>
 
       {/* Bottom Bar */}
       <div className="srsti-bottom">
-        <p>&copy; 2026 ANGADI Outdoor. Made slowly, for the trail.</p>
-        <p>Performance layers &middot; Mountain tested &middot; High altitude verified</p>
+        <p>&copy; 2026 ANGADI Outdoor</p>
+        <p>
+          <Link href="/terms" style={{ marginRight: '16px', textDecoration: 'underline' }}>Terms &amp; Conditions</Link>
+          <Link href="/privacy" style={{ textDecoration: 'underline' }}>Privacy Policy</Link>
+        </p>
       </div>
     </footer>
   );
