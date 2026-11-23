@@ -267,13 +267,12 @@ main,
   border-color: var(--c-moss) !important;
 }
 
-
 /* ════ LUXURY WATERMARK & GLASS FOOTER (SRSTI DESIGN SYSTEM) ═════════════════ */
 /* ══════════════════════════════════════════════════════════════════
-   SRSTI LUXURY SCULPTURAL FOOTER
-   - Giant dynamic watermark that rises on scroll
-   - Floating frosted glass panel
-   - Liquid metallic subscribe button
+   ANGADI LUXURY SCULPTURAL FOOTER
+   - Giant dynamic watermark that rises on scroll (Theme: Moss to Clay)
+   - Floating frosted glass panel (Theme: Cream & Moss)
+   - Liquid metallic subscribe button (Theme: Terracotta Clay liquid)
    ══════════════════════════════════════════════════════════════════ */
 
 @property --liquid-y {
@@ -312,7 +311,7 @@ main,
   font-weight: 500;
   line-height: 0.8;
   letter-spacing: 0.04em;
-  background: linear-gradient(135deg, #1c1612 0%, #5c3810 45%, #c88a2c 100%);
+  background: linear-gradient(135deg, #1d251e 0%, var(--c-moss, #2e3a2f) 50%, var(--c-clay, #b5562f) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -328,9 +327,9 @@ main,
   width: 100%;
   max-width: 80rem;
   border-radius: 2rem;
-  background: rgba(255, 252, 246, 0.84);
-  border: 1px solid rgba(28, 22, 18, 0.12);
-  box-shadow: 0 25px 50px -20px rgba(28, 22, 18, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  background: rgba(244, 239, 230, 0.88);
+  border: 1px solid var(--c-line, rgba(46, 58, 47, 0.14));
+  box-shadow: 0 25px 50px -20px rgba(46, 58, 47, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
   padding: clamp(24px, 4vw, 44px);
@@ -344,7 +343,7 @@ main,
   font-family: inherit;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #7a4b0c;
+  color: var(--c-clay, #b5562f);
   font-size: 0.82rem;
   font-weight: 700;
   margin: 0 0 10px;
@@ -354,7 +353,7 @@ main,
   font-family: 'EB Garamond', Georgia, serif;
   font-size: clamp(22px, 2.3vw, 30px);
   line-height: 1.25;
-  color: #1c1612;
+  color: var(--c-moss, #2e3a2f);
   margin: 10px 0 20px;
   max-width: 400px;
   font-weight: 400;
@@ -372,19 +371,19 @@ main,
   flex: 1;
   min-width: 220px;
   border-radius: 9999px;
-  border: 1px solid rgba(28, 22, 18, 0.2);
-  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(46, 58, 47, 0.2);
+  background: rgba(255, 255, 255, 0.7);
   padding: 0 22px;
   font-size: 14px;
-  color: #1c1612;
+  color: var(--c-moss, #2e3a2f);
   outline: none;
   transition: border-color 0.25s, box-shadow 0.25s;
   box-sizing: border-box;
 }
 
 .srsti-input:focus {
-  border-color: #c88a2c;
-  box-shadow: 0 0 0 3px rgba(200, 138, 44, 0.2);
+  border-color: var(--c-clay, #b5562f);
+  box-shadow: 0 0 0 3px rgba(181, 86, 47, 0.2);
 }
 
 .srsti-liquid-btn {
@@ -401,8 +400,8 @@ main,
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  background: #1c1612;
-  color: #faf6ee;
+  background: var(--c-moss, #2e3a2f);
+  color: var(--c-cream, #f4efe6);
   border: none;
   cursor: pointer;
   transition: color 0.4s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -412,7 +411,7 @@ main,
 .srsti-liquid-btn:before {
   content: "";
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #b5741e, #d49b3e 50%, #f0c46b);
+  background: linear-gradient(135deg, #9a4423, var(--c-clay, #b5562f) 50%, var(--c-apricot, #e8c7a8));
   --liquid-y: 30%;
   width: 260%;
   transform: translate(-50%, var(--liquid-y)) rotate(0deg);
@@ -432,7 +431,7 @@ main,
 }
 
 .srsti-liquid-btn:hover {
-  color: #1c1612;
+  color: #fff8f0;
 }
 
 @keyframes liquid-spin {
@@ -460,14 +459,14 @@ main,
   display: inline-flex;
   min-height: 36px;
   align-items: center;
-  color: rgba(28, 22, 18, 0.82);
+  color: rgba(46, 58, 47, 0.85);
   font-size: 15px;
   text-decoration: none;
   transition: color 0.2s, transform 0.2s;
 }
 
 .srsti-nav-col a:hover {
-  color: #7a4b0c;
+  color: var(--c-clay, #b5562f);
   transform: translateX(4px);
 }
 
@@ -479,16 +478,16 @@ main,
   list-style: none;
   padding: 20px 0 0;
   margin: 0;
-  border-top: 1px solid rgba(28, 22, 18, 0.08);
+  border-top: 1px solid var(--c-line, rgba(46, 58, 47, 0.12));
 }
 
 .srsti-badge {
   border-radius: 9999px;
-  border: 1px solid rgba(28, 22, 18, 0.14);
+  border: 1px solid var(--c-line, rgba(46, 58, 47, 0.14));
   padding: 6px 14px;
   font-size: 12px;
-  color: #6e5d4f;
-  background: rgba(255, 252, 246, 0.6);
+  color: var(--c-muted, #625d54);
+  background: rgba(244, 239, 230, 0.7);
 }
 
 .srsti-bottom {
@@ -503,9 +502,9 @@ main,
   flex-wrap: wrap;
   gap: 16px;
   padding: 24px 0 36px;
-  border-top: 1px solid rgba(28, 22, 18, 0.1);
+  border-top: 1px solid var(--c-line, rgba(46, 58, 47, 0.12));
   font-size: 12px;
-  color: #6e5d4f;
+  color: var(--c-muted, #625d54);
   box-sizing: border-box;
 }
 

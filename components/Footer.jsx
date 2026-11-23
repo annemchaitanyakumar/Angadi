@@ -59,7 +59,7 @@ export default function Footer() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
-    
+
     // Initial calculation on mount
     updateWatermarkTransform();
 
@@ -142,7 +142,7 @@ export default function Footer() {
           </form>
 
           {subscribed && (
-            <p style={{ margin: '10px 0 0', fontSize: '13px', fontWeight: 600, color: '#7a4b0c' }} role="status">
+            <p style={{ margin: '10px 0 0', fontSize: '13px', fontWeight: 600, color: 'var(--c-clay, #b5562f)' }} role="status">
               ✓ Welcome to the pack. Watch your inbox.
             </p>
           )}
